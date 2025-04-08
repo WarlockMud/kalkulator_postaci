@@ -12,9 +12,9 @@ const semiGuildsData = [
         skills: {
           "wyczucie kierunku": 60,
           "znajomosc jezykow": 60,
-          "magie zycia": 80,
+          "magia zycia": 80,
           "koncentracje": 60,
-          "koncentracje w walce": 60,
+          "koncentracja w walce": 60,
           "czarodziejstwo": 50,
           "mistycyzm": 80
         }
@@ -34,9 +34,9 @@ const semiGuildsData = [
         skills: {
           "tarczownictwo": 60,
           "walke w szyku": 70,
-          "magie zycia": 60,
+          "magia zycia": 60,
           "koncentracje": 50,
-          "koncentracje w walce": 70,
+          "koncentracja w walce": 70,
           "zaklinanie": 60
         }
       },
@@ -46,9 +46,9 @@ const semiGuildsData = [
         skills: {
           "parowanie": 60,
           "walke w szyku": 70,
-          "magie zycia": 60,
+          "magia zycia": 60,
           "koncentracje": 50,
-          "koncentracje w walce": 70,
+          "koncentracja w walce": 70,
           "zaklinanie": 60
         }
       },
@@ -58,9 +58,9 @@ const semiGuildsData = [
         skills: {
           "uniki": 60,
           "walke w szyku": 70,
-          "magie zycia": 60,
+          "magia zycia": 60,
           "koncentracje": 50,
-          "koncentracje w walce": 70,
+          "koncentracja w walce": 70,
           "zaklinanie": 60
         }
       }
@@ -87,10 +87,10 @@ const semiGuildsData = [
           "bronie drzewcowe": 60,
           "wlocznie": 60,
           "bronie lancuchowe": 60,
-          "walke dwiema bronmi": 40,
-          "walke w ciemnosci": 60,
-          "ocene przeciwnika": 45,
-          "ocene obiektu": 70,
+          "walka dwiema bronmi": 40,
+          "walka w ciemnosci": 60,
+          "ocena przeciwnika": 45,
+          "ocena obiektu": 70,
           "szacowanie": 50,
           "wspinaczke": 65,
           "wyczucie kierunku": 50,
@@ -116,10 +116,10 @@ const semiGuildsData = [
           "bronie drzewcowe": 60,
           "wlocznie": 60,
           "bronie lancuchowe": 60,
-          "walke dwiema bronmi": 40,
-          "walke w ciemnosci": 60,
-          "ocene przeciwnika": 45,
-          "ocene obiektu": 70,
+          "walka dwiema bronmi": 40,
+          "walka w ciemnosci": 60,
+          "ocena przeciwnika": 45,
+          "ocena obiektu": 70,
           "szacowanie": 50,
           "wspinaczke": 65,
           "wyczucie kierunku": 50,
@@ -145,9 +145,9 @@ const semiGuildsData = [
         activePlayers: 2,
         skills: {
           "znajomosc jezykow": 50,
-          "magie zycia": 40,
+          "magia zycia": 40,
           "koncentracje": 60,
-          "koncentracje w walce": 40,
+          "koncentracja w walce": 40,
           "przemiane": 60,
           "mistycyzm": 60,
           "zaklinanie": 80
@@ -183,7 +183,7 @@ const semiGuildsData = [
           "skradanie sie": 60,
           "ukrywanie sie": 60,
           "koncentracje": 60,
-          "magie runiczna": 80
+          "magia runiczna": 80
         }
       },
       {
@@ -195,10 +195,10 @@ const semiGuildsData = [
           "znajomosc jezykow": 60,
           "skradanie sie": 60,
           "ukrywanie sie": 60,
-          "magie mroku": 80,
+          "magia mroku": 80,
           "koncentracje": 60,
-          "koncentracje w walce": 70,
-          "magie runiczna": 60
+          "koncentracja w walce": 70,
+          "magia runiczna": 60
         }
       }
     ]
@@ -215,10 +215,10 @@ const semiGuildsData = [
         activePlayers: 5,
         skills: {
           "zdolnosci przywodcze": 80,
-          "ocene przeciwnika": 60,
-          "ocene obiektu": 80,
+          "ocena przeciwnika": 60,
+          "ocena obiektu": 80,
           "szacowanie": 90,
-          "opieke nad zwierzetami": 70,
+          "opieka nad zwierzetami": 70,
           "wyczucie kierunku": 70,
           "spostrzegawczosc": 70,
           "targowanie sie": 90,
@@ -239,15 +239,15 @@ const semiGuildsData = [
         name: "lay_magia wody",
         activePlayers: 0,
         skills: {
-          "ocene obiektu": 35,
+          "ocena obiektu": 35,
           "szacowanie": 35,
           "znajomosc jezykow": 45,
-          "magie ognia": 46,
-          "magie powietrza": 46,
-          "magie ziemi": 46,
-          "magie wody": 81,
+          "magia ognia": 46,
+          "magia powietrza": 46,
+          "magia ziemi": 46,
+          "magia wody": 81,
           "koncentracje": 70,
-          "koncentracje w walce": 60,
+          "koncentracja w walce": 60,
           "czarodziejstwo": 40,
           "przemiane": 35,
           "rozpraszanie": 35
@@ -257,15 +257,15 @@ const semiGuildsData = [
         name: "lay_magia ziemi",
         activePlayers: 1,
         skills: {
-          "ocene obiektu": 35,
+          "ocena obiektu": 35,
           "szacowanie": 35,
           "znajomosc jezykow": 45,
-          "magie ognia": 46,
-          "magie powietrza": 46,
-          "magie ziemi": 81,
-          "magie wody": 46,
+          "magia ognia": 46,
+          "magia powietrza": 46,
+          "magia ziemi": 81,
+          "magia wody": 46,
           "koncentracje": 70,
-          "koncentracje w walce": 60,
+          "koncentracja w walce": 60,
           "czarodziejstwo": 40,
           "przemiane": 35,
           "rozpraszanie": 35
@@ -275,15 +275,15 @@ const semiGuildsData = [
         name: "lay_magia powietrza",
         activePlayers: 1,
         skills: {
-          "ocene obiektu": 35,
+          "ocena obiektu": 35,
           "szacowanie": 35,
           "znajomosc jezykow": 45,
-          "magie ognia": 46,
-          "magie powietrza": 81,
-          "magie ziemi": 46,
-          "magie wody": 46,
+          "magia ognia": 46,
+          "magia powietrza": 81,
+          "magia ziemi": 46,
+          "magia wody": 46,
           "koncentracje": 70,
-          "koncentracje w walce": 60,
+          "koncentracja w walce": 60,
           "czarodziejstwo": 40,
           "przemiane": 35,
           "rozpraszanie": 35
@@ -293,15 +293,15 @@ const semiGuildsData = [
         name: "lay_general",
         activePlayers: 0,
         skills: {
-          "ocene obiektu": 35,
+          "ocena obiektu": 35,
           "szacowanie": 35,
           "znajomosc jezykow": 45,
-          "magie ognia": 55,
-          "magie powietrza": 55,
-          "magie ziemi": 55,
-          "magie wody": 55,
+          "magia ognia": 55,
+          "magia powietrza": 55,
+          "magia ziemi": 55,
+          "magia wody": 55,
           "koncentracje": 70,
-          "koncentracje w walce": 60,
+          "koncentracja w walce": 60,
           "czarodziejstwo": 40,
           "przemiane": 35,
           "rozpraszanie": 35
@@ -311,15 +311,15 @@ const semiGuildsData = [
         name: "lay_magia ognia",
         activePlayers: 0,
         skills: {
-          "ocene obiektu": 35,
+          "ocena obiektu": 35,
           "szacowanie": 35,
           "znajomosc jezykow": 45,
-          "magie ognia": 81,
-          "magie powietrza": 46,
-          "magie ziemi": 46,
-          "magie wody": 46,
+          "magia ognia": 81,
+          "magia powietrza": 46,
+          "magia ziemi": 46,
+          "magia wody": 46,
           "koncentracje": 70,
-          "koncentracje w walce": 60,
+          "koncentracja w walce": 60,
           "czarodziejstwo": 40,
           "przemiane": 35,
           "rozpraszanie": 35
