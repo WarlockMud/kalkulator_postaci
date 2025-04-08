@@ -41,7 +41,7 @@
                             "jezdziectwo": 50,
                             "znajomosc jezykow": 50,
                             "koncentracje": 60,
-                            "koncentracje w walce": 70,
+                            "koncentracja w walce": 70,
                             "rozpraszanie": 80
                         }
                     }
@@ -91,7 +91,7 @@
                             "znajomosc jezykow": 65,
                             "magia mroku": 85,
                             "koncentracje": 80,
-                            "koncentracje w walce": 80,
+                            "koncentracja w walce": 80,
                             "iluzje": 80
                         }
                     },
@@ -310,7 +310,7 @@
                         activePlayers: 7,
                         specs: ["zwinny cios"],
                         skills: {
-                            "walke bez broni": 80,
+                            "walka bez broni": 80,
                             "uniki": 75,
                             "ocena przeciwnika": 55,
                             "opieka nad zwierzetami": 60,
@@ -322,7 +322,7 @@
                             "ukrywanie sie": 40,
                             "zwinny cios": 100,
                             "koncentracje": 50,
-                            "koncentracje w walce": 50,
+                            "koncentracja w walce": 50,
                             "przemiane": 80,
                             "przywolywanie": 40
                         }
@@ -344,7 +344,7 @@
                             "skradanie sie": 40,
                             "ukrywanie sie": 40,
                             "koncentracje": 70,
-                            "koncentracje w walce": 50,
+                            "koncentracja w walce": 50,
                             "iluzje": 70,
                             "przywolywanie": 80
                         }
@@ -398,7 +398,7 @@
                             "magia ziemi": 67,
                             "magia wody": 67,
                             "koncentracje": 90,
-                            "koncentracje w walce": 70,
+                            "koncentracja w walce": 70,
                             "magia runiczna": 40,
                             "czarodziejstwo": 40,
                             "przemiane": 40,
@@ -419,7 +419,7 @@
                             "magia ziemi": 67,
                             "magia wody": 67,
                             "koncentracje": 90,
-                            "koncentracje w walce": 70,
+                            "koncentracja w walce": 70,
                             "magia runiczna": 40,
                             "czarodziejstwo": 40,
                             "przemiane": 40,
@@ -440,7 +440,7 @@
                             "magia ziemi": 67,
                             "magia wody": 99,
                             "koncentracje": 90,
-                            "koncentracje w walce": 70,
+                            "koncentracja w walce": 70,
                             "magia runiczna": 40,
                             "czarodziejstwo": 40,
                             "przemiane": 40,
@@ -461,7 +461,7 @@
                             "magia ziemi": 75,
                             "magia wody": 75,
                             "koncentracje": 90,
-                            "koncentracje w walce": 70,
+                            "koncentracja w walce": 70,
                             "magia runiczna": 40,
                             "czarodziejstwo": 40,
                             "przemiane": 40,
@@ -482,7 +482,7 @@
                             "magia ziemi": 99,
                             "magia wody": 67,
                             "koncentracje": 90,
-                            "koncentracje w walce": 70,
+                            "koncentracja w walce": 70,
                             "magia runiczna": 40,
                             "czarodziejstwo": 40,
                             "przemiane": 40,

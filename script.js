@@ -409,8 +409,8 @@ function calculateModifiedSkills(baseSkills) {
                 else if (effect.stat === "umiejetnosc w koncentrowaniu swoich magicznych zdolnosci" && modifiedSkills.hasOwnProperty("koncentracje")) {
                     modifiedSkills["koncentracje"] += effectValue;
                 }
-                else if (effect.stat === "umiejetnosc w koncentrowaniu swoich magicznych zdolnosci podczas walki" && modifiedSkills.hasOwnProperty("koncentracje w walce")) {
-                    modifiedSkills["koncentracje w walce"] += effectValue;
+                else if (effect.stat === "umiejetnosc w koncentrowaniu swoich magicznych zdolnosci podczas walki" && modifiedSkills.hasOwnProperty("koncentracja w walce")) {
+                    modifiedSkills["koncentracja w walce"] += effectValue;
                 }
                 else if (effect.stat === "umiejetnosc w rozpraszaniu zaklec" && modifiedSkills.hasOwnProperty("rozpraszanie")) {
                     modifiedSkills["rozpraszanie"] += effectValue;
@@ -424,8 +424,8 @@ function calculateModifiedSkills(baseSkills) {
                 else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia iluzji" && modifiedSkills.hasOwnProperty("iluzje")) {
                     modifiedSkills["iluzje"] += effectValue;
                 }
-                else if (effect.stat === "umiejetnosc w walce bez broni" && modifiedSkills.hasOwnProperty("walke bez broni")) {
-                    modifiedSkills["walke bez broni"] += effectValue;
+                else if (effect.stat === "umiejetnosc w walce bez broni" && modifiedSkills.hasOwnProperty("walka bez broni")) {
+                    modifiedSkills["walka bez broni"] += effectValue;
                 }
                 else if (effect.stat === "wytrzymalosc" && modifiedSkills.hasOwnProperty("wytrzymalosc")) {
                     modifiedSkills["wytrzymalosc"] += effectValue;
