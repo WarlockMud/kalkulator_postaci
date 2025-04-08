@@ -352,7 +352,6 @@ function calculateModifiedSkills(baseSkills) {
     const modifiedSkills = {...baseSkills};
     const selectedWords = document.querySelectorAll('#wordsList input[type="checkbox"]:checked');
 
-    console.log("Selected words: ", baseSkills);
     selectedWords.forEach(checkbox => {
         const wordName = checkbox.value;
         const word = slowaData.find(w => w.name === wordName);
@@ -434,13 +433,13 @@ function calculateModifiedSkills(baseSkills) {
                     const diff = baseSkills["tarczownictwo"] - baseSkills["walka dwiema bronmi"];
                     modifiedSkills["tarczownictwo"] -= diff
                     modifiedSkills["walka dwiema bronmi"] += diff
-                    console.log("Zamiana umiejętności tarczownictwo i walka dwiema bronmi diff " + diff + " tt " + baseSkills["tarczownictwo"] + " wb " + baseSkills["walka dwiema bronmi"]);
+                    console.log("Podmiana diff " + diff + " tarcza " + baseSkills["tarczownictwo"] + " 2h " + baseSkills["walka dwiema bronmi"]);
                 }
                 else if (effect.description === "zamienia ze soba umiejetnosci w poslugiwaniu sie magia zycia i w poslugiwaniu sie magia mroku") {
                     const diff = baseSkills["magia zycia"] - baseSkills["magia mroku"];
                     modifiedSkills["magia zycia"] -= diff
                     modifiedSkills["magia mroku"] += diff
-                    console.log("Zdrada " + diff + " tt " + baseSkills["magia zycia"] + " wb " + baseSkills["magia mroku"]);
+                    console.log("Zdrada " + diff + " zycie " + baseSkills["magia zycia"] + " mrok " + baseSkills["magia mroku"]);
                 }
             });
         }
