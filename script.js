@@ -285,27 +285,24 @@ function updateSkillsSummary() {
     const semiPathSelect = document.getElementById('semiPathSelect');
     const skillsSummaryDiv = document.getElementById('skillsSummary');
 
-    let mainGuildSkills = {};
-    let semiGuildSkills = {};
-
     const selectedMainGuild = guildsData.find(g => g.code === guildSelect.value);
     const selectedSemiGuild = semiGuildsData.find(g => g.code === semiGuildSelect.value);
 
     const selectedMainPath = selectedMainGuild && selectedMainGuild.paths ? selectedMainGuild.paths.find(p => p.name === pathSelect.value) : null;
     const selectedSemiPath = selectedSemiGuild && selectedSemiGuild.semipaths ? selectedSemiGuild.semipaths.find(sp => sp.name === semiPathSelect.value) : null;
 
-    let baseSkills = {};
+    let baseSkills = {...skillsGp};
 
     if (selectedMainPath) {
-        baseSkills = {...selectedMainPath.skills};
-        mainGuildSkills = selectedMainPath.skills || {};
+        for (const skill in selectedMainPath.skills) {
+            baseSkills[skill] = Math.max(baseSkills[skill] || 0, selectedMainPath.skills[skill]);
+        }
     }
 
     if (selectedSemiPath) {
         for (const skill in selectedSemiPath.skills) {
             baseSkills[skill] = Math.max(baseSkills[skill] || 0, selectedSemiPath.skills[skill]);
         }
-        semiGuildSkills = selectedSemiPath.skills || {};
     }
 
     const modifiedSkills = calculateModifiedSkills(baseSkills);
@@ -313,7 +310,7 @@ function updateSkillsSummary() {
     skillsSummaryDiv.innerHTML = '';
 
     Object.entries(modifiedSkills).forEach(([skillName, value]) => {
-        const displayName = skillDisplayMapping[skillName] || skillName;
+        const displayName = skillName.charAt(0).toUpperCase() + skillName.slice(1);
         const originalBaseValue = baseSkills[skillName] || 0;
         const difference = value - originalBaseValue;
 
@@ -355,6 +352,7 @@ function calculateModifiedSkills(baseSkills) {
     const modifiedSkills = {...baseSkills};
     const selectedWords = document.querySelectorAll('#wordsList input[type="checkbox"]:checked');
 
+    console.log("Selected words: ", baseSkills);
     selectedWords.forEach(checkbox => {
         const wordName = checkbox.value;
         const word = slowaData.find(w => w.name === wordName);
@@ -362,6 +360,7 @@ function calculateModifiedSkills(baseSkills) {
         if (word && word.effects) {
             word.effects.forEach(effect => {
                 const effectValue = parseInt(effect.value);
+
                 if (modifiedSkills.hasOwnProperty(effect.stat)) {
                     modifiedSkills[effect.stat] += effectValue;
                 } else if (effect.stat === "umiejetnosci walki wszystkimi bronmi") {
@@ -372,7 +371,7 @@ function calculateModifiedSkills(baseSkills) {
                         }
                     });
                 } else if (effect.stat === "umiejetnosci ze wszystkich szkol magii") {
-                    const magicSkills = ["magie ognia", "magie wody", "magie ziemi", "magie powietrza", "magie mroku", "iluzje", "przemiane", "przywolywanie", "magie runiczna", "czarodziejstwo"];
+                    const magicSkills = ["magia ognia", "magia wody", "magia ziemi", "magia powietrza", "magia mroku", "iluzje", "przemiane", "przywolywanie", "magia runiczna", "czarodziejstwo"];
                     magicSkills.forEach(skill => {
                         if (modifiedSkills.hasOwnProperty(skill)) {
                             modifiedSkills[skill] += effectValue;
@@ -386,26 +385,26 @@ function calculateModifiedSkills(baseSkills) {
                 else if (effect.stat === "umiejetnosc w parowaniu ciosow przeciwnika" && modifiedSkills.hasOwnProperty("parowanie")) {
                     modifiedSkills["parowanie"] += effectValue;
                 }
-                else if (effect.stat === "umiejetnosc w walce dwiema bronmi jednoczesnie" && modifiedSkills.hasOwnProperty("walke dwiema bronmi")) {
-                    modifiedSkills["walke dwiema bronmi"] += effectValue;
+                else if (effect.stat === "umiejetnosc w walce dwiema bronmi jednoczesnie" && modifiedSkills.hasOwnProperty("walka dwiema bronmi")) {
+                    modifiedSkills["walka dwiema bronmi"] += effectValue;
                 }
                 else if (effect.stat === "umiejetnosc w skutecznym uzywaniu tarczy" && modifiedSkills.hasOwnProperty("tarczownictwo")) {
                     modifiedSkills["tarczownictwo"] += effectValue;
                 }
-                else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia ognia" && modifiedSkills.hasOwnProperty("magie ognia")) {
-                    modifiedSkills["magie ognia"] += effectValue;
+                else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia ognia" && modifiedSkills.hasOwnProperty("magia ognia")) {
+                    modifiedSkills["magia ognia"] += effectValue;
                 }
-                else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia wody" && modifiedSkills.hasOwnProperty("magie wody")) {
-                    modifiedSkills["magie wody"] += effectValue;
+                else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia wody" && modifiedSkills.hasOwnProperty("magia wody")) {
+                    modifiedSkills["magia wody"] += effectValue;
                 }
-                else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia ziemi" && modifiedSkills.hasOwnProperty("magie ziemi")) {
-                    modifiedSkills["magie ziemi"] += effectValue;
+                else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia ziemi" && modifiedSkills.hasOwnProperty("magia ziemi")) {
+                    modifiedSkills["magia ziemi"] += effectValue;
                 }
-                else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia powietrza" && modifiedSkills.hasOwnProperty("magie powietrza")) {
-                    modifiedSkills["magie powietrza"] += effectValue;
+                else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia powietrza" && modifiedSkills.hasOwnProperty("magia powietrza")) {
+                    modifiedSkills["magia powietrza"] += effectValue;
                 }
-                else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia mroku" && modifiedSkills.hasOwnProperty("magie mroku")) {
-                    modifiedSkills["magie mroku"] += effectValue;
+                else if (effect.stat === "umiejetnosc w poslugiwaniu sie magia mroku" && modifiedSkills.hasOwnProperty("magia mroku")) {
+                    modifiedSkills["magia mroku"] += effectValue;
                 }
                 else if (effect.stat === "umiejetnosc w koncentrowaniu swoich magicznych zdolnosci" && modifiedSkills.hasOwnProperty("koncentracje")) {
                     modifiedSkills["koncentracje"] += effectValue;
@@ -430,6 +429,18 @@ function calculateModifiedSkills(baseSkills) {
                 }
                 else if (effect.stat === "wytrzymalosc" && modifiedSkills.hasOwnProperty("wytrzymalosc")) {
                     modifiedSkills["wytrzymalosc"] += effectValue;
+                }
+                else if (effect.description === "zamienia ze soba umiejetnosci w skutecznym uzywaniu tarczy i w walce dwiema bronmi jednoczesnie") {
+                    const diff = baseSkills["tarczownictwo"] - baseSkills["walka dwiema bronmi"];
+                    modifiedSkills["tarczownictwo"] -= diff
+                    modifiedSkills["walka dwiema bronmi"] += diff
+                    console.log("Zamiana umiejętności tarczownictwo i walka dwiema bronmi diff " + diff + " tt " + baseSkills["tarczownictwo"] + " wb " + baseSkills["walka dwiema bronmi"]);
+                }
+                else if (effect.description === "zamienia ze soba umiejetnosci w poslugiwaniu sie magia zycia i w poslugiwaniu sie magia mroku") {
+                    const diff = baseSkills["magia zycia"] - baseSkills["magia mroku"];
+                    modifiedSkills["magia zycia"] -= diff
+                    modifiedSkills["magia mroku"] += diff
+                    console.log("Zdrada " + diff + " tt " + baseSkills["magia zycia"] + " wb " + baseSkills["magia mroku"]);
                 }
             });
         }
