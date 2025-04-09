@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     populateWordsList();
     setupEventListeners();
     setupDarkMode();
+    loadBuildFromURL();
 });
 
 let selectedMainGuildPath = null;
@@ -119,6 +120,7 @@ function setupEventListeners() {
     const searchWordsInput = document.getElementById('searchWords');
     const clearSelectionsButton = document.getElementById('clearSelections');
     const exportButton = document.getElementById('exportButton');
+    const generateLinkButton = document.getElementById('generateLinkButton');
 
     // Guild Selection
     guildSelect.addEventListener('change', function() {
@@ -184,6 +186,7 @@ function setupEventListeners() {
 
     // Export Button
     exportButton.addEventListener('click', exportToMarkdown);
+    generateLinkButton.addEventListener('click', generateAndShowShareableLink);
 }
 
 function setupDarkMode() {
@@ -564,3 +567,213 @@ function exportToMarkdown() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+
+/**
+ * Zbiera aktualną konfigurację bildu z interfejsu użytkownika.
+ */
+function getCurrentBuildData() {
+    const selectedWords = Array.from(document.querySelectorAll('#wordsList input[type="checkbox"]:checked'))
+        .map(checkbox => checkbox.value);
+
+    const build = {
+        guild: document.getElementById('guildSelect').value || null, // Zapisz null jeśli puste
+        path: document.getElementById('pathSelect').value || null,
+        semiGuild: document.getElementById('semiGuildSelect').value || null,
+        semiPath: document.getElementById('semiPathSelect').value || null,
+        words: selectedWords
+    };
+    console.log("Zebrane dane bildu:", build);
+    return build;
+}
+
+/**
+ * Koduje obiekt danych bildu do formatu Base64-JSON.
+ */
+function encodeBuildData(buildData) {
+    try {
+        const jsonString = JSON.stringify(buildData);
+        return btoa(jsonString); // Kodowanie do Base64
+    } catch (error) {
+        console.error("Błąd podczas kodowania danych bildu:", error);
+        return null;
+    }
+}
+
+/**
+ * Dekoduje dane bildu z formatu Base64-JSON.
+ */
+function decodeBuildData(encodedData) {
+    try {
+        const jsonString = atob(encodedData); // Dekodowanie z Base64
+        return JSON.parse(jsonString);
+    } catch (error) {
+        console.error("Błąd podczas dekodowania lub parsowania danych bildu:", error);
+        return null; // Zwróć null w razie błędu
+    }
+}
+
+/**
+ * Stosuje wczytane dane bildu do interfejsu użytkownika.
+ * Ważna jest kolejność i wywoływanie eventów/aktualizacji.
+ */
+async function applyBuildData(buildData) {
+    if (!buildData) return;
+
+    // 1. Odznacz wszystkie słowa i usuń podświetlenie
+    document.querySelectorAll('#wordsList input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+        const label = checkbox.nextElementSibling;
+        if (label && label.tagName === 'LABEL') {
+            label.classList.remove('selected-item');
+        }
+    });
+
+    // 2. Zaznacz wybrane słowa i dodaj podświetlenie
+    if (buildData.words && Array.isArray(buildData.words)) {
+        buildData.words.forEach(wordValue => {
+            const checkbox = document.querySelector(`#wordsList input[value="${wordValue}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+                const label = checkbox.nextElementSibling;
+                if (label && label.tagName === 'LABEL') {
+                    label.classList.add('selected-item');
+                }
+            }
+        });
+    }
+
+    // 3. Ustaw gildię zawodową i poczekaj na załadowanie ścieżek
+    const guildSelect = document.getElementById('guildSelect');
+    if (buildData.guild && guildSelect.querySelector(`option[value="${buildData.guild}"]`)) {
+        guildSelect.value = buildData.guild;
+        // Ręcznie wywołaj logikę, która normalnie dzieje się po zmianie gildii
+        const selectedGuildData = guildsData.find(g => g.code === buildData.guild);
+        updateRacesAllowed(selectedGuildData); // Zaktualizuj rasy od razu
+        populatePathSelect(selectedGuildData, false); // Wypełnij ścieżki dla tej gildii
+
+        // Ustaw ścieżkę zawodową (teraz, gdy opcje są dostępne)
+        const pathSelect = document.getElementById('pathSelect');
+        if (buildData.path && pathSelect.querySelector(`option[value="${buildData.path}"]`)) {
+            pathSelect.value = buildData.path;
+        } else {
+            pathSelect.value = ''; // Jeśli zapisana ścieżka nie istnieje lub jest null
+        }
+    } else {
+        guildSelect.value = ''; // Resetuj, jeśli brak danych lub nieprawidłowe
+        populatePathSelect(null, false); // Wyczyść ścieżki
+        updateRacesAllowed(null); // Resetuj rasy
+    }
+
+    // 4. Ustaw gildię półzawodową i poczekaj na załadowanie ścieżek
+    const semiGuildSelect = document.getElementById('semiGuildSelect');
+    if (buildData.semiGuild && semiGuildSelect.querySelector(`option[value="${buildData.semiGuild}"]`)) {
+        semiGuildSelect.value = buildData.semiGuild;
+        // Ręcznie wywołaj logikę, która normalnie dzieje się po zmianie gildii półzawodowej
+        const selectedSemiGuildData = semiGuildsData.find(g => g.code === buildData.semiGuild);
+        updateRacesAllowed(selectedSemiGuildData); // Zaktualizuj rasy
+        populatePathSelect(selectedSemiGuildData, true); // Wypełnij ścieżki
+
+        // Ustaw ścieżkę półzawodową
+        const semiPathSelect = document.getElementById('semiPathSelect');
+        if (buildData.semiPath && semiPathSelect.querySelector(`option[value="${buildData.semiPath}"]`)) {
+            semiPathSelect.value = buildData.semiPath;
+        } else {
+            semiPathSelect.value = '';
+        }
+    } else {
+        semiGuildSelect.value = '';
+        populatePathSelect(null, true);
+        // updateRacesAllowed wywołane już przy głównej gildii, może nie trzeba drugi raz
+    }
+
+    // 5. Zaktualizuj wszystkie podsumowania i liczniki
+    // Ważne: Wywołaj *po* ustawieniu wszystkich wartości
+    updateSelectedWordCount();
+    updateSkillsSummary();
+    updateEffectsSummary();
+    updateActivePlayers();
+    // updateRacesAllowed zostało wywołane w krokach 3 i 4
+}
+
+/**
+ * Sprawdza URL przy ładowaniu strony i wczytuje konfigurację, jeśli jest obecna.
+ */
+function loadBuildFromURL() {
+    if (window.location.hash && window.location.hash.length > 1) {
+        const encodedData = window.location.hash.substring(1); // Usuń '#'
+        const buildData = decodeBuildData(encodedData);
+
+        if (buildData) {
+            console.log("Wczytywanie konfiguracji z URL...");
+            applyBuildData(buildData).then(() => {
+                console.log("Konfiguracja z URL wczytana pomyślnie.");
+            }).catch(error => {
+                console.error("Błąd podczas stosowania konfiguracji z URL:", error);
+            });
+        } else {
+            console.warn("Nie udało się zdekodować danych z fragmentu URL.");
+            // Opcjonalnie: wyczyść hash, jeśli jest nieprawidłowy
+            // window.location.hash = '';
+        }
+    } else {
+        console.log("Brak konfiguracji w URL do wczytania.");
+    }
+}
+
+
+/**
+ * Generuje link udostępniania, wyświetla go w polu input ORAZ kopiuje do schowka.
+ */
+function generateAndShowShareableLink() {
+    const buildData = getCurrentBuildData();
+    const encodedData = encodeBuildData(buildData);
+
+    if(encodedData) {
+        const baseUrl = window.location.origin + window.location.pathname;
+        const shareableLink = baseUrl + '#' + encodedData;
+
+        const linkInput = document.getElementById('shareLinkInput');
+
+        // 1. Wypełnij pole input (nadal przydatne, aby użytkownik widział link)
+        if (linkInput) {
+            linkInput.value = shareableLink;
+        }
+        console.log("Wygenerowany link:", shareableLink);
+
+        // 2. Skopiuj link do schowka
+        navigator.clipboard.writeText(shareableLink).then(() => {
+            // Sukces - poinformuj użytkownika
+            // alert("Link do bildu został skopiowany do schowka!");
+
+            // Opcjonalnie: Możesz na chwilę zmienić tekst przycisku
+            const button = document.getElementById('generateLinkButton');
+            if (button) {
+                const originalText = button.textContent;
+                button.textContent = 'Skopiowano!';
+                button.disabled = true; // Zapobiegaj szybkiemu ponownemu klikaniu
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.disabled = false;
+                }, 2000); // Zmień z powrotem po 2 sekundach
+            }
+
+        }).catch(err => {
+            // Błąd - poinformuj użytkownika i zaloguj błąd
+            console.error('Nie udało się skopiować linku do schowka: ', err);
+            alert("Nie udało się automatycznie skopiować linku. Możesz skopiować go ręcznie z pola powyżej.");
+
+            // W przypadku błędu, upewnij się, że pole input jest widoczne i zaznaczone
+            if (linkInput) {
+                linkInput.select();
+                linkInput.setSelectionRange(0, 99999); // Dla urządzeń mobilnych
+            }
+        });
+
+        // Opcjonalnie: zaktualizuj hash w bieżącym URL bez przeładowania strony
+        // window.location.hash = encodedData;
+
+    } else {
+        alert("Wystąpił błąd podczas generowania linku.");
+    }
+}
+// --- Koniec funkcji do obsługi linków udostępniania ---
