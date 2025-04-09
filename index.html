@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,103 +9,132 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <div class="min-h-screen p-4">
-        <div class="container mx-auto">
-            <header class="flex justify-between items-center mb-6">
-                <h1 class="text-3xl font-bold">Warlock MUD Kalkulator Postaci</h1>
+<div class="min-h-screen p-4">
+    <div class="container mx-auto">
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold">Warlock MUD Kalkulator Postaci</h1>
+            <div class="flex items-center space-x-4">
+                <div class="flex items-center">
+                        <span class="mr-1 text-sm font-medium" title="Pokaż/Ukryj bazowe umiejętności GP">GP
+                            Skills</span>
+                    <span id="gpSkillsStatus" class="text-xs font-bold mr-2 w-6 text-center">ON</span>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                        <input type="checkbox" id="gpSkillsToggle"
+                               class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="gpSkillsToggle"
+                               class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
+                    </div>
+                </div>
                 <div class="flex items-center">
                     <span class="mr-2"><i class="fas fa-sun"></i></span>
-                    <div class="relative inline-block w-12 mr-2 align-middle select-none">
-                        <input type="checkbox" id="themeToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" />
-                        <label for="themeToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                    <div class="relative inline-block w-10 mr-2 align-middle select-none">
+                        <input type="checkbox" id="themeToggle"
+                               class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                        <label for="themeToggle"
+                               class="toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer"></label>
                     </div>
                     <span><i class="fas fa-moon"></i></span>
                 </div>
-            </header>
+            </div>
+        </header>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-1">
-                    <div class="card rounded-lg shadow p-4 mb-6">
-    <h2 class="text-xl font-semibold mb-4">Wybór Gildii i Ścieżki</h2>
-    <div class="mb-6 guild-section">
-        <div class="mb-4">
-            <label for="guildSelect" class="block mb-2">Gildia Zawodowa:</label>
-            <select id="guildSelect" class="w-full p-2 border rounded bg-transparent border-gray-400">
-                <option value="">Wybierz gildię...</option>
-            </select>
-        </div>
-
-        <div class="mb-4">
-            <label for="pathSelect" class="block mb-2">Ścieżka Gildii Zawodowej:</label>
-            <select id="pathSelect" class="w-full p-2 border rounded bg-transparent border-gray-400">
-                <option value="">Najpierw wybierz gildię...</option>
-            </select>
-        </div>
-
-        <div id="racesAllowed" class="mb-4">
-            <h3 class="font-medium mb-1">Dozwolone rasy (gildia zawodowa):</h3>
-            <p class="text-sm">Wybierz gildię zawodową, aby zobaczyć dozwolone rasy.</p>
-        </div>
-
-        <div id="activePlayers" class="text-sm">
-            <p>Aktywnych graczy (gildia zawodowa): -</p>
-        </div>
-    </div>
-    <div class="mb-6 guild-section">
-        <div class="mb-4">
-            <label for="semiGuildSelect" class="block mb-2">Gildia Półzawodowa:</label>
-            <select id="semiGuildSelect" class="w-full p-2 border rounded bg-transparent border-gray-400">
-                <option value="">Wybierz gildię...</option>
-            </select>
-        </div>
-
-        <div class="mb-4">
-            <label for="semiPathSelect" class="block mb-2">Ścieżka Gildii Półzawodowej:</label>
-            <select id="semiPathSelect" class="w-full p-2 border rounded bg-transparent border-gray-400">
-                <option value="">Najpierw wybierz gildię półzawodową...</option>
-            </select>
-        </div>
-
-        <div id="semiRacesAllowed" class="mb-4">
-            <h3 class="font-medium mb-1">Dozwolone rasy (gildia półzawodowa):</h3>
-            <p class="text-sm">Wybierz gildię półzawodową, aby zobaczyć dozwolone rasy.</p>
-        </div>
-
-        <div id="semiActivePlayers" class="text-sm">
-            <p>Aktywnych graczy (gildia półzawodowa): -</p>
-        </div>
-    </div>
-</div>
-
-                    <div class="card rounded-lg shadow p-4">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold">Słowa</h2>
-                            <div>
-                                <span class="text-sm mr-2">Wybrano: <span id="selectedWordCount">0</span></span>
-                                <button id="clearSelections" class="text-sm px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600">Wyczyść</button>
-                            </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-1">
+                <div class="card rounded-lg shadow p-4 mb-6">
+                    <h2 class="text-xl font-semibold mb-4">Wybór Gildii i Ścieżki</h2>
+                    <div class="mb-6 guild-section">
+                        <div class="mb-4">
+                            <label for="guildSelect" class="block mb-2">Gildia Zawodowa:</label>
+                            <select id="guildSelect"
+                                    class="w-full p-2 border rounded bg-transparent border-gray-400">
+                                <option value="">Wybierz gildię...</option>
+                            </select>
                         </div>
 
                         <div class="mb-4">
-                            <input type="text" id="searchWords" placeholder="Szukaj słów..." class="w-full p-2 border rounded bg-transparent border-gray-400">
+                            <label for="pathSelect" class="block mb-2">Ścieżka Gildii Zawodowej:</label>
+                            <select id="pathSelect"
+                                    class="w-full p-2 border rounded bg-transparent border-gray-400">
+                                <option value="">Najpierw wybierz gildię...</option>
+                            </select>
                         </div>
 
-                        <div id="wordsList" class="overflow-y-auto max-h-96 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            </div>
+                        <div id="racesAllowed" class="mb-4">
+                            <h3 class="font-medium mb-1">Dozwolone rasy (gildia zawodowa):</h3>
+                            <p class="text-sm">Wybierz gildię zawodową, aby zobaczyć dozwolone rasy.</p>
+                        </div>
+
+                        <div id="activePlayers" class="text-sm">
+                            <p>Aktywnych graczy (gildia zawodowa): -</p>
+                        </div>
+                    </div>
+                    <div class="mb-6 guild-section">
+                        <div class="mb-4">
+                            <label for="semiGuildSelect" class="block mb-2">Gildia Półzawodowa:</label>
+                            <select id="semiGuildSelect"
+                                    class="w-full p-2 border rounded bg-transparent border-gray-400">
+                                <option value="">Wybierz gildię...</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="semiPathSelect" class="block mb-2">Ścieżka Gildii Półzawodowej:</label>
+                            <select id="semiPathSelect"
+                                    class="w-full p-2 border rounded bg-transparent border-gray-400">
+                                <option value="">Najpierw wybierz gildię półzawodową...</option>
+                            </select>
+                        </div>
+
+                        <div id="semiRacesAllowed" class="mb-4">
+                            <h3 class="font-medium mb-1">Dozwolone rasy (gildia półzawodowa):</h3>
+                            <p class="text-sm">Wybierz gildię półzawodową, aby zobaczyć dozwolone rasy.</p>
+                        </div>
+
+                        <div id="semiActivePlayers" class="text-sm">
+                            <p>Aktywnych graczy (gildia półzawodowa): -</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="lg:col-span-2">
-                    <div class="card rounded-lg shadow p-4 mb-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold">Podsumowanie Umiejętności</h2>
-                            <button id="exportButton" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-                                <i class="fas fa-download mr-1"></i> Eksportuj do .md
+                <div class="card rounded-lg shadow p-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Słowa</h2>
+                        <div>
+                            <span class="text-sm mr-2">Wybrano: <span id="selectedWordCount">0</span></span>
+                            <button id="clearSelections"
+                                    class="text-sm px-2 py-1 bg-red-500 text-white rounded hover:bg-red-600">Wyczyść
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <input type="text" id="searchWords" placeholder="Szukaj słów..."
+                               class="w-full p-2 border rounded bg-transparent border-gray-400">
+                    </div>
+
+                    <div id="wordsList" class="overflow-y-auto max-h-96 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-2">
+                <div class="card rounded-lg shadow p-4 mb-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold">Podsumowanie Umiejętności</h2>
+                        <div class="flex space-x-2">
+                            <button id="exportMdButton"
+                                    class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm">
+                                <i class="fas fa-download mr-1"></i> export do .MD
+                            </button>
+                            <button id="exportJsonButton"
+                                    class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
+                                <i class="fas fa-download mr-1"></i> export do JSON
                             </button>
                             <button id="generateLinkButton"
                                     class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 min-w-[900px]"
-                                    style="min-width: 200px;" >
+                                    style="min-width: 200px;">
                                 Link do udostępnienia
                             </button>
                             <div class="mt-0 hidden">
@@ -112,27 +142,30 @@
                                        class="w-full px-3 py-2 rounded-md shadow-sm">
                             </div>
                         </div>
-
-                        <div id="skillsSummary" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <p class="text-center col-span-1 md:col-span-2">Wybierz gildię i ścieżkę, aby zobaczyć umiejętności.</p>
-                        </div>
                     </div>
 
-                    <div class="card rounded-lg shadow p-4">
-                        <h2 class="text-xl font-semibold mb-4">Efekty Wybranych Słów</h2>
-                        <div id="effectsSummary" class="space-y-2">
-                            <p>Wybierz słowa, aby zobaczyć ich efekty.</p>
-                        </div>
+                    <div id="skillsSummary" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <p class="text-center col-span-1 md:col-span-2">Wybierz gildię i ścieżkę, aby zobaczyć
+                            umiejętności.</p>
+                    </div>
+                </div>
+
+                <div class="card rounded-lg shadow p-4">
+                    <h2 class="text-xl font-semibold mb-4">Efekty Wybranych Słów</h2>
+                    <div id="effectsSummary" class="space-y-2">
+                        <p>Wybierz słowa, aby zobaczyć ich efekty.</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script src="gildie_zawodowe.js"></script>
-    <script src="gildie_polzawodowe.js"></script>
-    <script src="slowa.js"></script>
-    <script src="skills_gp.js"></script>
-    <script src="script.js"></script>
+<script src="gildie_zawodowe.js"></script>
+<script src="gildie_polzawodowe.js"></script>
+<script src="slowa.js"></script>
+<script src="skills_gp.js"></script>
+<script src="script.js"></script>
 </body>
+
 </html>
