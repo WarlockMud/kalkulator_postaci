@@ -13,7 +13,7 @@ const semiGuildsData = [
           "wyczucie kierunku": 60,
           "znajomosc jezykow": 60,
           "magia zycia": 80,
-          "koncentracje": 60,
+          "koncentracja": 60,
           "koncentracja w walce": 60,
           "czarodziejstwo": 50,
           "mistycyzm": 80
@@ -35,7 +35,7 @@ const semiGuildsData = [
           "tarczownictwo": 60,
           "walke w szyku": 70,
           "magia zycia": 60,
-          "koncentracje": 50,
+          "koncentracja": 50,
           "koncentracja w walce": 70,
           "zaklinanie": 60
         }
@@ -47,7 +47,7 @@ const semiGuildsData = [
           "parowanie": 60,
           "walke w szyku": 70,
           "magia zycia": 60,
-          "koncentracje": 50,
+          "koncentracja": 50,
           "koncentracja w walce": 70,
           "zaklinanie": 60
         }
@@ -59,7 +59,7 @@ const semiGuildsData = [
           "uniki": 60,
           "walke w szyku": 70,
           "magia zycia": 60,
-          "koncentracje": 50,
+          "koncentracja": 50,
           "koncentracja w walce": 70,
           "zaklinanie": 60
         }
@@ -146,7 +146,7 @@ const semiGuildsData = [
         skills: {
           "znajomosc jezykow": 50,
           "magia zycia": 40,
-          "koncentracje": 60,
+          "koncentracja": 60,
           "koncentracja w walce": 40,
           "przemiane": 60,
           "mistycyzm": 60,
@@ -182,7 +182,7 @@ const semiGuildsData = [
           "znajomosc jezykow": 60,
           "skradanie sie": 60,
           "ukrywanie sie": 60,
-          "koncentracje": 60,
+          "koncentracja": 60,
           "magia runiczna": 80
         }
       },
@@ -196,7 +196,7 @@ const semiGuildsData = [
           "skradanie sie": 60,
           "ukrywanie sie": 60,
           "magia mroku": 80,
-          "koncentracje": 60,
+          "koncentracja": 60,
           "koncentracja w walce": 70,
           "magia runiczna": 60
         }
@@ -246,7 +246,7 @@ const semiGuildsData = [
           "magia powietrza": 46,
           "magia ziemi": 46,
           "magia wody": 81,
-          "koncentracje": 70,
+          "koncentracja": 70,
           "koncentracja w walce": 60,
           "czarodziejstwo": 40,
           "przemiane": 35,
@@ -264,7 +264,7 @@ const semiGuildsData = [
           "magia powietrza": 46,
           "magia ziemi": 81,
           "magia wody": 46,
-          "koncentracje": 70,
+          "koncentracja": 70,
           "koncentracja w walce": 60,
           "czarodziejstwo": 40,
           "przemiane": 35,
@@ -282,7 +282,7 @@ const semiGuildsData = [
           "magia powietrza": 81,
           "magia ziemi": 46,
           "magia wody": 46,
-          "koncentracje": 70,
+          "koncentracja": 70,
           "koncentracja w walce": 60,
           "czarodziejstwo": 40,
           "przemiane": 35,
@@ -300,7 +300,7 @@ const semiGuildsData = [
           "magia powietrza": 55,
           "magia ziemi": 55,
           "magia wody": 55,
-          "koncentracje": 70,
+          "koncentracja": 70,
           "koncentracja w walce": 60,
           "czarodziejstwo": 40,
           "przemiane": 35,
@@ -318,7 +318,7 @@ const semiGuildsData = [
           "magia powietrza": 46,
           "magia ziemi": 46,
           "magia wody": 46,
-          "koncentracje": 70,
+          "koncentracja": 70,
           "koncentracja w walce": 60,
           "czarodziejstwo": 40,
           "przemiane": 35,

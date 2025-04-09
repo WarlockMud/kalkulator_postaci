@@ -1,92 +1,114 @@
+.custom-checkbox {
+    display: none;
+}
 
-        .custom-checkbox {
-            display: none;
-        }
-        .custom-checkbox + label {
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .custom-checkbox:checked + label {
-            background-color: var(--accent-color);
-            color: white;
-        }
-        .tooltip {
-            visibility: hidden;
-            position: absolute;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s;
-            width: 280px;
-        }
-        .tooltip-trigger:hover .tooltip {
-            visibility: visible;
-            opacity: 1;
-        }
-        :root {
-            --bg-color: #f8f9fa;
-            --text-color: #212529;
-            --card-bg: #ffffff;
-            --border-color: #dee2e6;
-            --accent-color: #4f46e5;
-            --accent-hover: #4338ca;
-            --skill-bar-bg: #e9ecef;
-            --skill-bar-fill: #4f46e5;
-        }
-        .dark {
-            --bg-color: #1a202c;
-            --text-color: #f8f9fa;
-            --card-bg: #2d3748;
-            --border-color: #4a5568;
-            --accent-color: #6366f1;
-            --accent-hover: #5a67d8;
-            --skill-bar-bg: #4a5568;
-            --skill-bar-fill: #6366f1;
-        }
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        .btn-primary {
-            background-color: var(--accent-color);
-        }
-        .btn-primary:hover {
-            background-color: var(--accent-hover);
-        }
-        .skill-bar {
-            background-color: var(--skill-bar-bg);
-        }
-        .skill-bar-fill {
-            background-color: var(--skill-bar-fill);
-        }
-        .toggle-checkbox:checked {
-            right: 0;
-            border-color: var(--accent-color);
-        }
-        .toggle-checkbox:checked + .toggle-label {
-            background-color: var(--accent-color);
-        }
-        .selected-item {
-            background-color: var(--accent-color);
-            color: white;
-        }
-		.skill-diff {
-		right: 0.5em; /* Spróbuj tej wartości jako punktu wyjścia */
-		top: -1.0em;
-		/* Możesz też spróbować użyć transformacji, aby dodatkowo przesunąć w lewo */
-		/* transform: translateX(100%); */ /* To przesunie element w prawo o jego własną szerokość */
-		}
-		.guild-section {
-		margin-bottom: 2rem; /* Większy odstęp między sekcjami gildii */
-		}
-		.dark select {
-		background-color: #2d3748; /* Użyj ciemnego koloru tła, np. takiego jak tło kart */
-		color: #f8f9fa; /* Ustaw jasny kolor tekstu dla lepszego kontrastu */
-		border-color: #4a5568; /* Dopasuj kolor obramowania do innych ciemnych elementów */
-		}
-	}
+.custom-checkbox+label {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.custom-checkbox:checked+label {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.3s;
+    width: 280px;
+}
+
+.tooltip-trigger:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+:root {
+    --bg-color: #f8f9fa;
+    --text-color: #212529;
+    --card-bg: #ffffff;
+    --border-color: #dee2e6;
+    --accent-color: #4f46e5;
+    --accent-hover: #4338ca;
+    --skill-bar-bg: #e9ecef;
+    --skill-bar-fill: #4f46e5;
+}
+
+.dark {
+    --bg-color: #1a202c;
+    --text-color: #f8f9fa;
+    --card-bg: #2d3748;
+    --border-color: #4a5568;
+    --accent-color: #6366f1;
+    --accent-hover: #5a67d8;
+    --skill-bar-bg: #4a5568;
+    --skill-bar-fill: #6366f1;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-primary {
+    background-color: var(--accent-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+}
+
+.skill-bar {
+    background-color: var(--skill-bar-bg);
+}
+
+.skill-bar-fill {
+    background-color: var(--skill-bar-fill);
+}
+
+.toggle-checkbox:checked {
+    right: 0;
+    border-color: var(--accent-color);
+}
+
+.toggle-checkbox:checked+.toggle-label {
+    background-color: var(--accent-color);
+}
+
+.selected-item {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.skill-diff {
+    right: 0.5em;
+    /* Spróbuj tej wartości jako punktu wyjścia */
+    top: -1.0em;
+    /* Możesz też spróbować użyć transformacji, aby dodatkowo przesunąć w lewo */
+    /* transform: translateX(100%); */
+    /* To przesunie element w prawo o jego własną szerokość */
+}
+
+.guild-section {
+    margin-bottom: 2rem;
+    /* Większy odstęp między sekcjami gildii */
+}
+
+.dark select {
+    background-color: #2d3748;
+    /* Użyj ciemnego koloru tła, np. takiego jak tło kart */
+    color: #f8f9fa;
+    /* Ustaw jasny kolor tekstu dla lepszego kontrastu */
+    border-color: #4a5568;
+    /* Dopasuj kolor obramowania do innych ciemnych elementów */
+}
