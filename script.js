@@ -404,7 +404,6 @@ function updateSelectedWordCount() {
     document.getElementById('selectedWordCount').textContent = selectedWords.length;
 }
 
-// --- NOWOŚĆ / ZMIANA: Logika obliczania i wyświetlania umiejętności ---
 function updateSkillsSummary() {
     const gpSkillsToggle = document.getElementById('gpSkillsToggle');
     const skillsSummaryDiv = document.getElementById('skillsSummary');
@@ -412,24 +411,31 @@ function updateSkillsSummary() {
     const semiGuildSelect = document.getElementById('semiGuildSelect');
     const pathSelect = document.getElementById('pathSelect');
     const semiPathSelect = document.getElementById('semiPathSelect');
-
+    // Guard against missing elements
+    if (!gpSkillsToggle || !skillsSummaryDiv || !guildSelect || !semiGuildSelect || !pathSelect || !semiPathSelect) {
+        console.error("Missing one or more required elements for updateSkillsSummary.");
+        return;
+    }
+    // Guard against missing data
+    if (typeof guildsData === 'undefined' || typeof semiGuildsData === 'undefined' || typeof skillsGp === 'undefined') {
+        console.error("Missing data for updateSkillsSummary.");
+        skillsSummaryDiv.innerHTML = '<p class="text-red-500">Błąd ładowania danych.</p>';
+        return;
+    }
     const gpEnabled = gpSkillsToggle.checked;
-
     // Find selected guilds and paths data
-    const selectedMainGuild = (typeof guildsData !== 'undefined' && guildSelect.value)
-        ? guildsData.find(g => g.code === guildSelect.value) : null;
-    const selectedSemiGuild = (typeof semiGuildsData !== 'undefined' && semiGuildSelect.value)
-        ? semiGuildsData.find(g => g.code === semiGuildSelect.value) : null;
-
+    const selectedMainGuild = guildSelect.value ?
+        guildsData.find(g => g.code === guildSelect.value) : null;
+    const selectedSemiGuild = semiGuildSelect.value ? semiGuildsData.find(g => g.code === semiGuildSelect.value) : null;
     const selectedMainPath = (selectedMainGuild && selectedMainGuild.paths && pathSelect.value)
-        ? selectedMainGuild.paths.find(p => p.name === pathSelect.value) : null;
+        ?
+        selectedMainGuild.paths.find(p => p.name === pathSelect.value) : null;
     const selectedSemiPath = (selectedSemiGuild && selectedSemiGuild.semipaths && semiPathSelect.value)
-        ? selectedSemiGuild.semipaths.find(sp => sp.name === semiPathSelect.value) : null;
-
+        ?
+        selectedSemiGuild.semipaths.find(sp => sp.name === semiPathSelect.value) : null;
     // --- Core Logic for Combining Skills ---
     let baseSkills = {};
     const combinedGuildSkills = {};
-
     // 1. Combine skills from selected main and semi guild paths, taking the higher value
     if (selectedMainPath && selectedMainPath.skills) {
         for (const skill in selectedMainPath.skills) {
@@ -441,96 +447,67 @@ function updateSkillsSummary() {
             combinedGuildSkills[skill] = Math.max(combinedGuildSkills[skill] || 0, selectedSemiPath.skills[skill]);
         }
     }
-
     // 2. Incorporate GP skills based on the toggle state
-    if (typeof skillsGp !== 'undefined') {
-        if (gpEnabled) {
-            // GP ON: Merge GP and Guild skills, taking the higher value for overlaps
-            // Start with all GP skills
-            baseSkills = { ...skillsGp };
-            // Merge guild skills, overriding or adding if higher/new
-            for (const skill in combinedGuildSkills) {
-                baseSkills[skill] = Math.max(baseSkills[skill] || 0, combinedGuildSkills[skill]);
-            }
-        } else {
-            // GP OFF: Only use skills present in selected guilds.
-            // GP skills that overlap are implicitly included via combinedGuildSkills.
-            // GP skills *not* in guilds are excluded.
-            baseSkills = { ...combinedGuildSkills };
+    if (gpEnabled) {
+        // GP ON: Merge GP and Guild skills, taking the higher value for overlaps
+        baseSkills = { ...skillsGp };
+        for (const skill in combinedGuildSkills) {
+            baseSkills[skill] = Math.max(baseSkills[skill] || 0, combinedGuildSkills[skill]);
         }
     } else {
-        // Fallback if skillsGp is missing
-        console.error("skillsGp nie jest zdefiniowane!");
+        // GP OFF: Only use skills present in selected guilds.
         baseSkills = { ...combinedGuildSkills };
     }
     // --- End Core Logic ---
-
-
-    // Calculate final skills after applying word effects
-    const modifiedSkills = calculateModifiedSkills(baseSkills); // Pass the correctly calculated base
-
+    const modifiedSkills = calculateModifiedSkills(baseSkills);
+    // Calculate final skills
     // --- Display Logic ---
-    skillsSummaryDiv.innerHTML = ''; // Clear previous summary
-
+    skillsSummaryDiv.innerHTML = '';
+    // Clear previous summary
     if (Object.keys(modifiedSkills).length === 0) {
-        skillsSummaryDiv.innerHTML = '<p class="text-center col-span-1 md:col-span-2 italic text-sm">Wybierz gildię/ścieżkę lub włącz GP Skills, aby zobaczyć umiejętności.</p>';
+        skillsSummaryDiv.innerHTML = '<p class="text-center col-span-1 md:col-span-2 italic text-sm py-4">Wybierz gildię/ścieżkę lub włącz GP Skills, aby zobaczyć umiejętności.</p>';
         return;
     }
-
     // Sort skills alphabetically for consistent display
-    const sortedSkillNames = Object.keys(modifiedSkills).sort();
-
-
+    const sortedSkillNames = Object.keys(modifiedSkills).sort((a, b) => a.localeCompare(b));
     sortedSkillNames.forEach(skillName => {
-        const value = modifiedSkills[skillName];
-        const displayName = skillName.charAt(0).toUpperCase() + skillName.slice(1);
-        // Get the base value *after* GP toggle logic but *before* word mods
-        const originalBaseValue = baseSkills[skillName] || 0;
-        const difference = value - originalBaseValue;
-
+        let finalValue = Math.max(0, Math.min(modifiedSkills[skillName], 200)); // Clamp to 0-200
+        // Ensure baseSkills considers the GP toggle state correctly before word mods
+        const baseValueBeforeWords = baseSkills[skillName] || 0;
+        const difference = finalValue - baseValueBeforeWords;
         const skillDiv = document.createElement('div');
-        // Added min-w-0 to prevent flex items from overflowing in rare cases
-        skillDiv.className = 'mb-2 relative min-w-0';
-
+        skillDiv.className = 'mb-0.5 relative min-w-0';  // Further reduced margin
         const nameElement = document.createElement('div');
-        // Use flex for alignment, justify-between for spacing
-        nameElement.className = 'flex justify-between items-baseline mb-1 text-sm';
-        // Wrap skill name in span to prevent stretching
+        nameElement.className = 'flex justify-between items-baseline mb-0.5 text-sm'; // Further reduced margin
         nameElement.innerHTML = `
-            <span class="truncate pr-2">${displayName}</span>
-            <span class="font-semibold whitespace-nowrap">${value}</span>
-        `;
-
-
-        // Display difference indicator only if there is a change
+  <span class="truncate pr-1">${skillName.charAt(0).toUpperCase() + skillName.slice(1)}</span>
+  <span class="font-semibold whitespace-nowrap">${finalValue}</span>
+  `;
         if (difference !== 0) {
             const diffElement = document.createElement('div');
-            // Position relative to the skillDiv, adjust top/right as needed
-            diffElement.className = 'skill-diff absolute -top-1 right-0 text-xs font-bold'; // Simplified positioning
+            diffElement.className = 'skill-diff absolute -top-1 right-0 text-xs font-bold';
             diffElement.textContent = (difference > 0 ? '+' : '') + difference;
             diffElement.classList.add(difference > 0 ? 'text-green-500' : 'text-red-500');
-            // Ensure difference doesn't overlap value - might need tweaking
-            nameElement.querySelector('.font-semibold').style.marginRight = '2.5em'; // Add margin to value span
+            // Add margin to the value span to prevent overlap with the difference indicator
+            const valueSpan = nameElement.querySelector('.font-semibold');
+            if (valueSpan) valueSpan.style.marginRight = '2.5em';
             skillDiv.appendChild(diffElement);
         }
-
         const barContainer = document.createElement('div');
-        // Use background color variables for theme compatibility
-        barContainer.className = 'skill-bar w-full h-2 rounded-full bg-gray-200 dark:bg-gray-600 overflow-hidden'; // Added overflow-hidden
-
+        barContainer.className = 'skill-bar w-full h-1.5 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden'; // Reduced height
         const barFill = document.createElement('div');
-        // Use background color variables and ensure value doesn't exceed 100% for width
-        barFill.className = 'skill-bar-fill h-full rounded-full bg-indigo-500 dark:bg-indigo-600 transition-width duration-300 ease-in-out'; // Added transition
-        barFill.style.width = `${Math.max(0, Math.min(value, 100))}%`; // Clamp value between 0 and 100
-
+        barFill.className = 'skill-bar-fill h-full rounded-full transition-width duration-300 ease-in-out';
+        // Calculate color
+        const red = Math.round(255 * (200 - finalValue) / 200);
+        const green = Math.round(255 * finalValue / 200);
+        barFill.style.backgroundColor = `rgb(${red}, ${green}, 0)`;
+        barFill.style.width = `${(finalValue / 200) * 100}%`;  // Calculate width based on 200
         barContainer.appendChild(barFill);
-        skillDiv.appendChild(nameElement); // Add name/value first
-        skillDiv.appendChild(barContainer); // Then add bar
-
+        skillDiv.appendChild(nameElement);
+        skillDiv.appendChild(barContainer);
         skillsSummaryDiv.appendChild(skillDiv);
     });
 }
-
 
 // --- Calculate Modified Skills ---
 // --- ZMIANY W MAPOWANIU STATYSTYK ---
@@ -602,7 +579,7 @@ function calculateModifiedSkills(baseSkills) {
                         });
                         return; // Handled multiple skills, continue to next effect
                     } else if (stat === "umiejetnosci ze wszystkich szkol magii") {
-                        const magicSkills = ["magia ognia", "magia wody", "magia ziemi", "magia powietrza", "magia mroku", "iluzja", "przemiane", "przywolywanie", "magia runiczna", "czarodziejstwo", "magia zycia", "mistycyzm", "zaklinanie"]; // Ensure this list is complete
+                        const magicSkills = ["magia ognia", "magia wody", "magia ziemi", "magia powietrza", "magia mroku", "iluzja", "przemiana", "przywolywanie", "magia runiczna", "czarodziejstwo", "magia zycia", "mistycyzm", "zaklinanie"]; // Ensure this list is complete
                         magicSkills.forEach(skill => {
                             if (modifiedSkills.hasOwnProperty(skill)) {
                                 modifiedSkills[skill] = (modifiedSkills[skill] || 0) + effectValue;
@@ -630,7 +607,7 @@ function calculateModifiedSkills(baseSkills) {
                     else if (stat === "umiejetnosc w poslugiwaniu sie magia wody") targetSkill = "magia wody";
                     else if (stat === "umiejetnosc w poslugiwaniu sie magia zycia") targetSkill = "magia zycia"; // FIX for Kaznodzieja
                     else if (stat === "umiejetnosc w poslugiwaniu sie magia mroku") targetSkill = "magia mroku";
-                    else if (stat === "umiejetnosc w poslugiwaniu sie magia przemiany") targetSkill = "przemiane"; // Uwaga na 'e'
+                    else if (stat === "umiejetnosc w poslugiwaniu sie magia przemiany") targetSkill = "przemiana"; // Uwaga na 'e'
                     else if (stat === "umiejetnosc w mistycyzmie") targetSkill = "mistycyzm"; // FIX for Kaznodzieja, Mistycyzm
                     else if (stat === "umiejetnosc w zaklinaniu") targetSkill = "zaklinanie";
                     else if (stat === "umiejetnosc w magii tworzenia i przywolywania") targetSkill = "przywolywanie";

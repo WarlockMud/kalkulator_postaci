@@ -148,7 +148,7 @@ const semiGuildsData = [
           "magia zycia": 40,
           "koncentracja": 60,
           "koncentracja w walce": 40,
-          "przemiane": 60,
+          "przemiana": 60,
           "mistycyzm": 60,
           "zaklinanie": 80
         }
@@ -249,7 +249,7 @@ const semiGuildsData = [
           "koncentracja": 70,
           "koncentracja w walce": 60,
           "czarodziejstwo": 40,
-          "przemiane": 35,
+          "przemiana": 35,
           "rozpraszanie": 35
         }
       },
@@ -267,7 +267,7 @@ const semiGuildsData = [
           "koncentracja": 70,
           "koncentracja w walce": 60,
           "czarodziejstwo": 40,
-          "przemiane": 35,
+          "przemiana": 35,
           "rozpraszanie": 35
         }
       },
@@ -285,7 +285,7 @@ const semiGuildsData = [
           "koncentracja": 70,
           "koncentracja w walce": 60,
           "czarodziejstwo": 40,
-          "przemiane": 35,
+          "przemiana": 35,
           "rozpraszanie": 35
         }
       },
@@ -303,7 +303,7 @@ const semiGuildsData = [
           "koncentracja": 70,
           "koncentracja w walce": 60,
           "czarodziejstwo": 40,
-          "przemiane": 35,
+          "przemiana": 35,
           "rozpraszanie": 35
         }
       },
@@ -321,7 +321,7 @@ const semiGuildsData = [
           "koncentracja": 70,
           "koncentracja w walce": 60,
           "czarodziejstwo": 40,
-          "przemiane": 35,
+          "przemiana": 35,
           "rozpraszanie": 35
         }
       }
