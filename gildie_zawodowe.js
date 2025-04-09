@@ -323,7 +323,7 @@ const guildsData = [
                     "zwinny cios": 100,
                     "koncentracja": 50,
                     "koncentracja w walce": 50,
-                    "przemiane": 80,
+                    "przemiana": 80,
                     "przywolywanie": 40
                 }
             },
@@ -401,7 +401,7 @@ const guildsData = [
                     "koncentracja w walce": 70,
                     "magia runiczna": 40,
                     "czarodziejstwo": 40,
-                    "przemiane": 40,
+                    "przemiana": 40,
                     "zaklinanie": 35,
                     "rozpraszanie": 40
                 }
@@ -422,7 +422,7 @@ const guildsData = [
                     "koncentracja w walce": 70,
                     "magia runiczna": 40,
                     "czarodziejstwo": 40,
-                    "przemiane": 40,
+                    "przemiana": 40,
                     "zaklinanie": 35,
                     "rozpraszanie": 40
                 }
@@ -443,7 +443,7 @@ const guildsData = [
                     "koncentracja w walce": 70,
                     "magia runiczna": 40,
                     "czarodziejstwo": 40,
-                    "przemiane": 40,
+                    "przemiana": 40,
                     "zaklinanie": 35,
                     "rozpraszanie": 40
                 }
@@ -464,7 +464,7 @@ const guildsData = [
                     "koncentracja w walce": 70,
                     "magia runiczna": 40,
                     "czarodziejstwo": 40,
-                    "przemiane": 40,
+                    "przemiana": 40,
                     "zaklinanie": 35,
                     "rozpraszanie": 40
                 }
@@ -485,7 +485,7 @@ const guildsData = [
                     "koncentracja w walce": 70,
                     "magia runiczna": 40,
                     "czarodziejstwo": 40,
-                    "przemiane": 40,
+                    "przemiana": 40,
                     "zaklinanie": 35,
                     "rozpraszanie": 40
                 }
