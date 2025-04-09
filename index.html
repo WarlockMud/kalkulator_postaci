@@ -102,6 +102,15 @@
                             <button id="exportButton" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
                                 <i class="fas fa-download mr-1"></i> Eksportuj do .md
                             </button>
+                            <button id="generateLinkButton"
+                                    class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 min-w-[900px]"
+                                    style="min-width: 200px;" >
+                                Link do udostępnienia
+                            </button>
+                            <div class="mt-0 hidden">
+                                <input type="text" id="shareLinkInput" readonly
+                                       class="w-full px-3 py-2 rounded-md shadow-sm">
+                            </div>
                         </div>
 
                         <div id="skillsSummary" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -123,7 +132,6 @@
     <script src="gildie_zawodowe.js"></script>
     <script src="gildie_polzawodowe.js"></script>
     <script src="slowa.js"></script>
-    <script src="skills.js"></script>
     <script src="skills_gp.js"></script>
     <script src="script.js"></script>
 </body>
