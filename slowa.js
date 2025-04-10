@@ -1,17 +1,17 @@
-const slowaData = [
-    {
+const _slowaData = {
+    2: {
         "name": "wybraniec losu",
         "cost": 10,
-        "runes": ["Ko", "Dol", "El"],
+        "runes": [18, 14, 1],
         "description": "podnosi zauwazalnie prawdopodobienstwo zdobycia lepszych run (3)",
         "effects": [
             ["_pb_prop", "_live_i_rune_extra_levels", 3],
         ],
     },
-    {
+    3: {
         "name": "widzacy",
         "cost": 10,
-        "runes": ["Sol", "Tir", "Ral"],
+        "runes": [12, 3, 8],
         "description": "podnosi troche umiejetnosc w ocenianiu wlasnosci przedmiotow (20), troche umiejetnosc w szacowaniu wartosci przedmiotow (20) oraz sporo widzenie w ciemnosci (4) ponadto pozwala widziec magiczna energie (100)",
         "effects": [
             ["_pb_skill", 101, 20],
@@ -20,58 +20,58 @@ const slowaData = [
             ["_pb_prop", "_live_i_see_magic", 100],
         ],
     },
-    {
+    4: {
         "name": "leniuszek",
         "cost": 20,
-        "runes": ["Nef", "Hel", "Ko"],
+        "runes": [4, 15, 18],
         "description": "podnosi troche umiejetnosc w ocenianiu wlasnosci przedmiotow (20) ponadto juz nigdy nie bedziesz musial odwiedzac kowala (1)",
         "effects": [
             ["_pb_skill", 101, 20],
             ["_pb_prop", "_player_i_have_leniuch", 1],
         ],
     },
-    {
+    6: {
         "name": "duzo wiecej",
         "cost": 10,
-        "runes": ["Ort", "Hel", "Io"],
+        "runes": [9, 15, 16],
         "description": "podnosi zauwazalnie prawdopodobienstwo zdobycia dodatkowych run (150)",
         "effects": [
             ["_pb_prop", "_live_i_rune_extra_chance", 150],
         ],
     },
-    {
+    7: {
         "name": "jajoglowy",
         "cost": 10,
-        "runes": ["Sol", "Tal", "Thul"],
+        "runes": [12, 7, 10],
         "description": "podnosi sporo ilosc zapamietanych czarow (6) oraz nieco wielkosc listy dozwolonych czarow (3)",
         "effects": [
             ["_pb_prop", "_live_i_extra_remembered_spells", 6],
             ["_pb_prop", "_live_i_extra_auto_cast", 3],
         ],
     },
-    {
+    8: {
         "name": "spekulant",
         "cost": 20,
-        "runes": ["Thul", "Ort", "Amn"],
+        "runes": [10, 9, 11],
         "description": "podnosi troche umiejetnosc w zawieraniu korzystnych transakcji handlowych (20)",
         "effects": [
             ["_pb_skill", 110, 20],
         ],
     },
-    {
+    9: {
         "name": "profesor",
         "cost": 20,
-        "runes": ["Dol", "Tir", "Tal"],
+        "runes": [14, 3, 7],
         "description": "podnosi nieznacznie ilosc doswiadczenia przekazywanego na inteligencje (1500) oraz nieznacznie ilosc doswiadczenia przekazywanego na madrosc (1500)",
         "effects": [
             ["_pb_prop", "_live_i_extra_exp_modifier_3", 1500],
             ["_pb_prop", "_live_i_extra_exp_modifier_4", 1500],
         ],
     },
-    {
+    10: {
         "name": "miesniak",
         "cost": 20,
-        "runes": ["El", "Ral", "Dol"],
+        "runes": [1, 8, 14],
         "description": "podnosi minimalnie ilosc doswiadczenia przekazywanego na sile (1000), minimalnie ilosc doswiadczenia przekazywanego na zrecznosc (1000) oraz minimalnie ilosc doswiadczenia przekazywanego na wytrzymalosc (1000)",
         "effects": [
             ["_pb_prop", "_live_i_extra_exp_modifier_0", 1000],
@@ -79,379 +79,379 @@ const slowaData = [
             ["_pb_prop", "_live_i_extra_exp_modifier_2", 1000],
         ],
     },
-    {
+    11: {
         "name": "heros",
         "cost": 20,
-        "runes": ["Tal", "Hel", "Amn"],
+        "runes": [7, 15, 11],
         "description": "podnosi nieznacznie ilosc doswiadczenia przekazywanego na odwage (2000)",
         "effects": [
             ["_pb_prop", "_live_i_extra_exp_modifier_5", 2000],
         ],
     },
-    {
+    12: {
         "name": "kopacz",
         "cost": 10,
-        "runes": ["El", "Amn", "Ith"],
+        "runes": [1, 11, 6],
         "description": "podnosi troche umiejetnosc w wydobywaniu mineralow spod ziemi (20)",
         "effects": [
             ["_pb_skill", 112, 20],
         ],
     },
-    {
+    13: {
         "name": "wytapiacz",
         "cost": 10,
-        "runes": ["Amn", "Eld", "Eth"],
+        "runes": [11, 2, 5],
         "description": "podnosi troche umiejetnosc w metalurgii (20)",
         "effects": [
             ["_pb_skill", 114, 20],
         ],
     },
-    {
+    14: {
         "name": "kolekcjoner",
         "cost": 20,
-        "runes": ["Tir", "Dol", "Ort"],
+        "runes": [3, 14, 9],
         "description": "podnosi nieznacznie ilosc przedmiotow ktore mozesz trwale zabezpieczyc (1)",
         "effects": [
             ["_pb_prop", "_live_i_allowed_keep_forever", 1],
         ],
     },
-    {
+    15: {
         "name": "szczesciarz",
         "cost": 10,
-        "runes": ["Ith", "Tir", "Eld"],
+        "runes": [6, 3, 2],
         "description": "podnosi nieco prawdopodobienstwo zdobycia lepszych run (2)",
         "effects": [
             ["_pb_prop", "_live_i_rune_extra_levels", 2],
         ],
     },
-    {
+    16: {
         "name": "wiecej",
         "cost": 10,
-        "runes": ["El", "Eth", "Nef"],
+        "runes": [1, 5, 4],
         "description": "podnosi nieco prawdopodobienstwo zdobycia dodatkowych run (75)",
         "effects": [
             ["_pb_prop", "_live_i_rune_extra_chance", 75],
         ],
     },
-    {
+    17: {
         "name": "witalny",
         "cost": 20,
-        "runes": ["Shael", "Eld", "Thul"],
+        "runes": [13, 2, 10],
         "description": "podnosi ogromnie regeneracje kondycji (100)",
         "effects": [
             ["_pb_prop", "_live_i_hp_regen_increased", 100],
         ],
     },
-    {
+    18: {
         "name": "uduchowiony",
         "cost": 20,
-        "runes": ["Io", "Ith", "Tir"],
+        "runes": [16, 6, 3],
         "description": "podnosi minimalnie regeneracje many (5)",
         "effects": [
             ["_pb_prop", "_live_i_mana_regen_increased", 5],
         ],
     },
-    {
+    19: {
         "name": "niezmordowany",
         "cost": 20,
-        "runes": ["Eth", "El", "Hel"],
+        "runes": [5, 1, 15],
         "description": "podnosi troche regeneracje zmeczenia (40)",
         "effects": [
             ["_pb_prop", "_live_i_fatigue_regen_increased", 40],
         ],
     },
-    {
+    20: {
         "name": "farciarz",
         "cost": 20,
-        "runes": ["Lum", "Ral", "Dol"],
+        "runes": [17, 8, 14],
         "description": "podnosi zauwazalnie szczescie (50)",
         "effects": [
             ["_pb_prop", "_live_i_luck_increased", 50],
         ],
     },
-    {
+    101: {
         "name": "silny",
         "cost": 30,
-        "runes": ["Tir", "Ort", "Amn"],
+        "runes": [3, 9, 11],
         "description": "podnosi nieznacznie sile (20)",
         "effects": [
             ["_pb_stat", 0, 20],
         ],
     },
-    {
+    102: {
         "name": "zreczny",
         "cost": 30,
-        "runes": ["Amn", "Eth", "El"],
+        "runes": [11, 5, 1],
         "description": "podnosi nieznacznie zrecznosc (20)",
         "effects": [
             ["_pb_stat", 1, 20],
         ],
     },
-    {
+    103: {
         "name": "wytrzymaly",
         "cost": 30,
-        "runes": ["Thul", "Amn", "Eld"],
+        "runes": [10, 11, 2],
         "description": "podnosi nieznacznie wytrzymalosc (20)",
         "effects": [
             ["_pb_stat", 2, 20],
         ],
     },
-    {
+    104: {
         "name": "inteligentny",
         "cost": 30,
-        "runes": ["Eth", "Amn", "Ral"],
+        "runes": [5, 11, 8],
         "description": "podnosi nieznacznie inteligencje (20)",
         "effects": [
             ["_pb_stat", 3, 20],
         ],
     },
-    {
+    105: {
         "name": "madry",
         "cost": 30,
-        "runes": ["Nef", "Ral", "Amn"],
+        "runes": [4, 8, 11],
         "description": "podnosi nieznacznie madrosc (20)",
         "effects": [
             ["_pb_stat", 4, 20],
         ],
     },
-    {
+    106: {
         "name": "odwazny",
         "cost": 30,
-        "runes": ["Amn", "Tal", "Ort"],
+        "runes": [11, 7, 9],
         "description": "podnosi nieznacznie odwage (20)",
         "effects": [
             ["_pb_stat", 5, 20],
         ],
     },
-    {
+    201: {
         "name": "szampierz",
         "cost": 30,
-        "runes": ["Tal", "Eld", "Sol"],
+        "runes": [7, 2, 12],
         "description": "podnosi nieznacznie umiejetnosci walki wszystkimi bronmi (10)",
         "effects": [
             ["_pb_skill_weapon", 10],
         ],
     },
-    {
+    209: {
         "name": "karateka",
         "cost": 30,
-        "runes": ["Tir", "Amn", "Tal"],
+        "runes": [3, 11, 7],
         "description": "podnosi nieznacznie umiejetnosc w walce bez broni (10)",
         "effects": [
             ["_pb_skill", 21, 10],
         ],
     },
-    {
+    301: {
         "name": "patelnia",
         "cost": 30,
-        "runes": ["Eth", "Tal", "Sol"],
+        "runes": [5, 7, 12],
         "description": "podnosi nieznacznie umiejetnosc w skutecznym uzywaniu tarczy (10)",
         "effects": [
             ["_pb_skill", 26, 10],
         ],
     },
-    {
+    302: {
         "name": "lewak",
         "cost": 30,
-        "runes": ["Tal", "Amn", "Ral"],
+        "runes": [7, 11, 8],
         "description": "podnosi nieznacznie umiejetnosc w parowaniu ciosow przeciwnika (10)",
         "effects": [
             ["_pb_skill", 23, 10],
         ],
     },
-    {
+    303: {
         "name": "wicher",
         "cost": 30,
-        "runes": ["Ith", "Ort", "Amn"],
+        "runes": [6, 9, 11],
         "description": "podnosi nieznacznie umiejetnosc w unikaniu ciosow przeciwnika (10)",
         "effects": [
             ["_pb_skill", 24, 10],
         ],
     },
-    {
+    304: {
         "name": "tancerz",
         "cost": 30,
-        "runes": ["Dol", "El", "Ith"],
+        "runes": [14, 1, 6],
         "description": "podnosi nieznacznie umiejetnosc w walce dwiema bronmi jednoczesnie (10)",
         "effects": [
             ["_pb_skill", 20, 10],
         ],
     },
-    {
+    305: {
         "name": "koniuszy",
         "cost": 30,
-        "runes": ["Ort", "Nef", "Thul"],
+        "runes": [9, 4, 10],
         "description": "podnosi troche umiejetnosc w walce z konskiego grzbietu (20)",
         "effects": [
             ["_pb_skill", 25, 20],
         ],
     },
-    {
+    306: {
         "name": "przyboczny",
         "cost": 30,
-        "runes": ["Sol", "Ith", "Nef"],
+        "runes": [12, 6, 4],
         "description": "podnosi troche umiejetnosc w walce w szyku (20)",
         "effects": [
             ["_pb_skill", 31, 20],
         ],
     },
-    {
+    307: {
         "name": "przywodca",
         "cost": 30,
-        "runes": ["Thul", "Hel", "Dol"],
+        "runes": [10, 15, 14],
         "description": "podnosi troche umiejetnosc w wywieraniu wplywu na innych (20)",
         "effects": [
             ["_pb_skill", 30, 20],
         ],
     },
-    {
+    401: {
         "name": "ogien",
         "cost": 30,
-        "runes": ["Shael", "Thul", "Tir"],
+        "runes": [13, 10, 3],
         "description": "podnosi nieznacznie umiejetnosc w poslugiwaniu sie magia ognia (10)",
         "effects": [
             ["_pb_skill", 300, 10],
         ],
     },
-    {
+    402: {
         "name": "powietrze",
         "cost": 30,
-        "runes": ["Ort", "Ith", "Shael"],
+        "runes": [9, 6, 13],
         "description": "podnosi nieznacznie umiejetnosc w poslugiwaniu sie magia powietrza (10)",
         "effects": [
             ["_pb_skill", 301, 10],
         ],
     },
-    {
+    403: {
         "name": "ziemia",
         "cost": 30,
-        "runes": ["Thul", "Shael", "Eld"],
+        "runes": [10, 13, 2],
         "description": "podnosi nieznacznie umiejetnosc w poslugiwaniu sie magia ziemi (10)",
         "effects": [
             ["_pb_skill", 302, 10],
         ],
     },
-    {
+    404: {
         "name": "woda",
         "cost": 30,
-        "runes": ["Shael", "Eth", "El"],
+        "runes": [13, 5, 1],
         "description": "podnosi nieznacznie umiejetnosc w poslugiwaniu sie magia wody (10)",
         "effects": [
             ["_pb_skill", 303, 10],
         ],
     },
-    {
+    405: {
         "name": "zycie",
         "cost": 30,
-        "runes": ["El", "Tir", "Shael"],
+        "runes": [1, 3, 13],
         "description": "podnosi nieznacznie umiejetnosc w poslugiwaniu sie magia zycia (10)",
         "effects": [
             ["_pb_skill", 304, 10],
         ],
     },
-    {
+    406: {
         "name": "smierc",
         "cost": 30,
-        "runes": ["Shael", "Nef", "Ort"],
+        "runes": [13, 4, 9],
         "description": "podnosi nieznacznie umiejetnosc w poslugiwaniu sie magia mroku (10)",
         "effects": [
             ["_pb_skill", 305, 10],
         ],
     },
-    {
+    407: {
         "name": "przemiana",
         "cost": 30,
-        "runes": ["Ith", "Shael", "Tal"],
+        "runes": [6, 13, 7],
         "description": "podnosi nieznacznie umiejetnosc w poslugiwaniu sie magia przemiany (10)",
         "effects": [
             ["_pb_skill", 332, 10],
         ],
     },
-    {
+    408: {
         "name": "mistycyzm",
         "cost": 30,
-        "runes": ["Ort", "Eld", "Shael"],
+        "runes": [9, 2, 13],
         "description": "podnosi nieznacznie umiejetnosc w mistycyzmie (10)",
         "effects": [
             ["_pb_skill", 334, 10],
         ],
     },
-    {
+    409: {
         "name": "zaklinanie",
         "cost": 30,
-        "runes": ["Shael", "Tal", "Tir"],
+        "runes": [13, 7, 3],
         "description": "podnosi nieznacznie umiejetnosc w zaklinaniu (10)",
         "effects": [
             ["_pb_skill", 335, 10],
         ],
     },
-    {
+    410: {
         "name": "przywolywanie",
         "cost": 30,
-        "runes": ["Shael", "Ral", "Nef"],
+        "runes": [13, 8, 4],
         "description": "podnosi nieznacznie umiejetnosc w magii tworzenia i przywolywania (10)",
         "effects": [
             ["_pb_skill", 336, 10],
         ],
     },
-    {
+    411: {
         "name": "iluzja",
         "cost": 30,
-        "runes": ["Nef", "Shael", "Tal"],
+        "runes": [4, 13, 7],
         "description": "podnosi nieznacznie umiejetnosc w poslugiwaniu sie magia iluzji (10)",
         "effects": [
             ["_pb_skill", 333, 10],
         ],
     },
-    {
+    412: {
         "name": "rozpraszanie",
         "cost": 30,
-        "runes": ["Ith", "El", "Shael"],
+        "runes": [6, 1, 13],
         "description": "podnosi nieznacznie umiejetnosc w rozpraszaniu zaklec (10)",
         "effects": [
             ["_pb_skill", 337, 10],
         ],
     },
-    {
+    413: {
         "name": "czarodziejstwo",
         "cost": 30,
-        "runes": ["Eth", "Shael", "Tir"],
+        "runes": [5, 13, 3],
         "description": "podnosi nieznacznie umiejetnosc w znajomosci i uzywaniu magii (10)",
         "effects": [
             ["_pb_skill", 313, 10],
         ],
     },
-    {
+    414: {
         "name": "runy",
         "cost": 30,
-        "runes": ["Eld", "Tal", "Shael"],
+        "runes": [2, 7, 13],
         "description": "podnosi nieznacznie umiejetnosc w pisaniu i uzywaniu run (10)",
         "effects": [
             ["_pb_skill", 312, 10],
         ],
     },
-    {
+    415: {
         "name": "koncentracja",
         "cost": 30,
-        "runes": ["Ith", "Dol", "El"],
+        "runes": [6, 14, 1],
         "description": "podnosi nieznacznie umiejetnosc w koncentrowaniu swoich magicznych zdolnosci (10)",
         "effects": [
             ["_pb_skill", 310, 10],
         ],
     },
-    {
+    416: {
         "name": "waleczny spokoj",
         "cost": 30,
-        "runes": ["Dol", "Nef", "Tal"],
+        "runes": [14, 4, 7],
         "description": "podnosi troche umiejetnosc w koncentrowaniu swoich magicznych zdolnosci podczas walki (20)",
         "effects": [
             ["_pb_skill", 311, 20],
         ],
     },
-    {
+    501: {
         "name": "wojownik",
         "cost": 50,
-        "runes": ["Ral", "Tir", "Nef"],
+        "runes": [8, 3, 4],
         "description": "pozwala trenowac umiejetnosci walki wszystkimi bronmi na poprawnie (60), pozwala trenowac umiejetnosc w skutecznym uzywaniu tarczy na znosnie (45), pozwala trenowac umiejetnosc w parowaniu ciosow przeciwnika na znosnie (45) oraz pozwala trenowac umiejetnosc w unikaniu ciosow przeciwnika na znosnie (45)",
         "effects": [
             ["_pb_skill_learn_weapon", 60],
@@ -460,10 +460,10 @@ const slowaData = [
             ["_pb_skill_learn", 24, 45],
         ],
     },
-    {
+    502: {
         "name": "mag",
         "cost": 50,
-        "runes": ["Eth", "Ral", "Tir"],
+        "runes": [5, 8, 3],
         "description": "pozwala trenowac umiejetnosci ze wszystkich szkol magii na powierzchownie (40), pozwala trenowac umiejetnosc w koncentrowaniu swoich magicznych zdolnosci na poprawnie (60) oraz pozwala trenowac umiejetnosc w koncentrowaniu swoich magicznych zdolnosci podczas walki na znosnie (50)",
         "effects": [
             ["_pb_skill_learn_magic_all", 40],
@@ -471,10 +471,10 @@ const slowaData = [
             ["_pb_skill_learn", 311, 50],
         ],
     },
-    {
+    1101: {
         "name": "galop",
         "cost": 40,
-        "runes": ["Eld", "Eth", "Hel"],
+        "runes": [2, 5, 15],
         "description": "podnosi zauwazalnie umiejetnosc w jezdzie konnej (25), sporo umiejetnosc w walce z konskiego grzbietu (30) oraz nieznacznie umiejetnosci walki wszystkimi bronmi (10)",
         "effects": [
             ["_pb_skill", 111, 25],
@@ -482,10 +482,10 @@ const slowaData = [
             ["_pb_skill_weapon", 10],
         ],
     },
-    {
+    1102: {
         "name": "mikstura",
         "cost": 40,
-        "runes": ["Dol", "Thul", "Ral"],
+        "runes": [14, 10, 8],
         "description": "podnosi troche umiejetnosc w warzeniu i rozpoznawaniu mikstur (20), troche umiejetnosc w znajdowaniu i rozpoznawaniu ziol (20) oraz nieznacznie umiejetnosc w poslugiwaniu sie magia przemiany (10)",
         "effects": [
             ["_pb_skill", 331, 20],
@@ -493,10 +493,10 @@ const slowaData = [
             ["_pb_skill", 332, 10],
         ],
     },
-    {
+    1103: {
         "name": "berserker",
         "cost": 40,
-        "runes": ["Tir", "Lum", "Eth"],
+        "runes": [3, 17, 5],
         "description": "podnosi troche umiejetnosci walki wszystkimi bronmi (20) oraz troche umiejetnosc w walce bez broni (20) natomiast obniza nieznacznie umiejetnosc w unikaniu ciosow przeciwnika (-10), nieznacznie umiejetnosc w parowaniu ciosow przeciwnika (-10), nieznacznie umiejetnosc w skutecznym uzywaniu tarczy (-10) oraz minimalnie wytrzymalosc (-10)",
         "effects": [
             ["_pb_skill_weapon", 20],
@@ -507,10 +507,10 @@ const slowaData = [
             ["_pb_stat", 2, -10],
         ],
     },
-    {
+    1104: {
         "name": "barbarzynca",
         "cost": 40,
-        "runes": ["Lum", "Nef", "Ith"],
+        "runes": [17, 4, 6],
         "description": "podnosi nieco umiejetnosci walki wszystkimi bronmi (15), nieco umiejetnosc w walce bez broni (15), minimalnie umiejetnosc w unikaniu ciosow przeciwnika (5), minimalnie umiejetnosc w parowaniu ciosow przeciwnika (5) oraz minimalnie umiejetnosc w skutecznym uzywaniu tarczy (5) ponadto blokuje uzywanie jakiekolwiek magii",
         "effects": [
             ["_pb_skill_weapon", 15],
@@ -521,10 +521,10 @@ const slowaData = [
             ["_pb_prop", "_live_m_magic_blocked", "Twoja moc uleciala."],
         ],
     },
-    {
+    1105: {
         "name": "mag bojowy",
         "cost": 40,
-        "runes": ["Eth", "Io", "Thul"],
+        "runes": [5, 16, 10],
         "description": "podnosi minimalnie umiejetnosci walki wszystkimi bronmi (5), nieco umiejetnosc w koncentrowaniu swoich magicznych zdolnosci podczas walki (15), minimalnie umiejetnosc w unikaniu ciosow przeciwnika (5), minimalnie umiejetnosc w parowaniu ciosow przeciwnika (5) oraz minimalnie umiejetnosc w skutecznym uzywaniu tarczy (5) natomiast obniza nieco wplyw wagi zbroi na czarowanie (-25)",
         "effects": [
             ["_pb_skill_weapon", 5],
@@ -535,10 +535,10 @@ const slowaData = [
             ["_pb_prop", "_live_i_mage_armour_weight_increased", -25],
         ],
     },
-    {
+    1106: {
         "name": "tarczownik",
         "cost": 40,
-        "runes": ["Io", "Ith", "Ral"],
+        "runes": [16, 6, 8],
         "description": "podnosi nieco umiejetnosc w unikaniu ciosow przeciwnika (15), nieco umiejetnosc w parowaniu ciosow przeciwnika (15), nieco umiejetnosc w skutecznym uzywaniu tarczy (15), nieco umiejetnosc w walce w szyku (15) oraz nieco maksymalna kondycje (1000) natomiast obniza minimalnie umiejetnosci walki wszystkimi bronmi (-5) oraz minimalnie umiejetnosc w walce bez broni (-5)",
         "effects": [
             ["_pb_skill_weapon", -5],
@@ -550,20 +550,20 @@ const slowaData = [
             ["_pb_hp", 1000],
         ],
     },
-    {
+    1107: {
         "name": "celny",
         "cost": 40,
-        "runes": ["Amn", "Ort", "Hel"],
+        "runes": [11, 9, 15],
         "description": "podnosi nieznacznie umiejetnosc w walce dwiema bronmi jednoczesnie (10) oraz nieznacznie ilosc obrazen ktore pomijaja zbroje (20)",
         "effects": [
             ["_pb_skill", 20, 10],
             ["_pb_prop", "_live_i_ac_penetration", 20],
         ],
     },
-    {
+    1108: {
         "name": "szybki",
         "cost": 40,
-        "runes": ["Thul", "Hel", "Eld"],
+        "runes": [10, 15, 2],
         "description": "podnosi minimalnie zrecznosc (10) oraz nieznacznie szybkosc wyprowadzanych atakow (20) natomiast obniza minimalnie sile (-10) oraz nieznacznie umiejetnosc w wyczuwaniu slabosci wroga (-10)",
         "effects": [
             ["_pb_stat", 1, 10],
@@ -572,10 +572,10 @@ const slowaData = [
             ["_pb_skill", 207, -10],
         ],
     },
-    {
+    1109: {
         "name": "silacz",
         "cost": 40,
-        "runes": ["Fal", "Thul", "Ith"],
+        "runes": [19, 10, 6],
         "description": "podnosi minimalnie umiejetnosc w walce dwiema bronmi jednoczesnie (5) oraz nieznacznie regeneracje zmeczenia (15) ponadto pozwala dobywac dwureczne bronie jedna reka (2)",
         "effects": [
             ["_pb_skill", 20, 5],
@@ -583,10 +583,10 @@ const slowaData = [
             ["_pb_prop", "_live_i_fatigue_regen_increased", 15],
         ],
     },
-    {
+    1110: {
         "name": "mesmer",
         "cost": 40,
-        "runes": ["Sol", "Eth", "Lum"],
+        "runes": [12, 5, 17],
         "description": "podnosi nieznacznie umiejetnosc w koncentrowaniu swoich magicznych zdolnosci (10), minimalnie umiejetnosci ze wszystkich szkol magii (5) oraz nieznacznie maksymalna mane (300)",
         "effects": [
             ["_pb_skill", 310, 10],
@@ -594,19 +594,19 @@ const slowaData = [
             ["_pb_mana", 300],
         ],
     },
-    {
+    1111: {
         "name": "specjalista",
         "cost": 40,
-        "runes": ["Shael", "Io", "Sol"],
+        "runes": [13, 16, 12],
         "description": "podnosi nieznacznie ilosc wyprowadzanych atakow specjalnych (15)",
         "effects": [
             ["_pb_prop", "_live_i_special_attack_quickness", 15],
         ],
     },
-    {
+    1112: {
         "name": "kaplan bitewny",
         "cost": 40,
-        "runes": ["Dol", "Tir", "Io"],
+        "runes": [14, 3, 16],
         "description": "podnosi minimalnie umiejetnosc w poslugiwaniu sie magia zycia (5), nieznacznie umiejetnosc w koncentrowaniu swoich magicznych zdolnosci podczas walki (10), minimalnie umiejetnosc w unikaniu ciosow przeciwnika (5), minimalnie umiejetnosc w parowaniu ciosow przeciwnika (5) oraz minimalnie umiejetnosc w skutecznym uzywaniu tarczy (5) ponadto pozwala uzywac tarczy, parowac i unikac podczas czarowania (1)",
         "effects": [
             ["_pb_skill", 304, 5],
@@ -617,40 +617,40 @@ const slowaData = [
             ["_pb_prop", "_live_i_concentrate_use_defense", 1],
         ],
     },
-    {
+    1113: {
         "name": "zdrada",
         "cost": 10,
-        "runes": ["Io", "Tal", "El"],
+        "runes": [16, 7, 1],
         "description": "podnosi minimalnie inteligencje (5) ponadto zamienia ze soba umiejetnosci w poslugiwaniu sie magia zycia i w poslugiwaniu sie magia mroku",
         "effects": [
             ["_pb_stat", 3, 5],
             ["_pb_skill_swap", 304, 305],
         ],
     },
-    {
+    1114: {
         "name": "podmiana",
         "cost": 10,
-        "runes": ["Eld", "Io", "Thul"],
+        "runes": [2, 16, 10],
         "description": "podnosi minimalnie sile (5) ponadto zamienia ze soba umiejetnosci w skutecznym uzywaniu tarczy i w walce dwiema bronmi jednoczesnie",
         "effects": [
             ["_pb_stat", 0, 5],
             ["_pb_skill_swap", 26, 20],
         ],
     },
-    {
+    1115: {
         "name": "bestia",
         "cost": 40,
-        "runes": ["Hel", "El", "Dol"],
+        "runes": [15, 1, 14],
         "description": "podnosi nieznacznie umiejetnosc w walce bez broni (10) oraz nieznacznie umiejetnosc w poslugiwaniu sie magia przemiany (10)",
         "effects": [
             ["_pb_skill", 21, 10],
             ["_pb_skill", 332, 10],
         ],
     },
-    {
+    1116: {
         "name": "wladca bestii",
         "cost": 40,
-        "runes": ["Io", "Amn", "Nef"],
+        "runes": [16, 11, 4],
         "description": "podnosi nieznacznie umiejetnosc w magii tworzenia i przywolywania (10) natomiast obniza troche ilosc many potrzebna do utrzymania przywolancow (-35) ponadto pozwala przywolac jednego dodatkowego, innego niz juz wezwany przywolanca (1)",
         "effects": [
             ["_pb_skill", 336, 10],
@@ -658,10 +658,10 @@ const slowaData = [
             ["_pb_prop", "_live_i_summons_mana_usage_increased", -35],
         ],
     },
-    {
+    1117: {
         "name": "kaznodzieja",
         "cost": 40,
-        "runes": ["Sol", "Hel", "Ort"],
+        "runes": [12, 15, 9],
         "description": "podnosi nieznacznie umiejetnosc w poslugiwaniu sie magia zycia (10), nieznacznie umiejetnosc w mistycyzmie (10), minimalnie madrosc (10), nieznacznie odpornosc na obrazenia magii smierci (10) oraz minimalnie sile czarow leczacych (10)",
         "effects": [
             ["_pb_skill", 304, 10],
@@ -671,19 +671,19 @@ const slowaData = [
             ["_pb_prop", "_live_i_spell_strenght_increased_4", 10],
         ],
     },
-    {
+    1118: {
         "name": "sila smoka",
         "cost": 60,
-        "runes": ["Tal", "Dol", "Ko"],
+        "runes": [7, 14, 18],
         "description": "laczy ducha wlasciciela z duchem pradawnego smoka",
         "effects": [
             ["_pb_special", "sila smoka", "/d/Warlock/common/runes/spec_ciecie", "laczy ducha wlasciciela z duchem pradawnego smoka"],
         ],
     },
-    {
+    1119: {
         "name": "ciezkozbrojny",
         "cost": 40,
-        "runes": ["Lum", "Eth", "Eld"],
+        "runes": [17, 5, 2],
         "description": "podnosi minimalnie sile (5), minimalnie umiejetnosci walki wszystkimi bronmi (5) oraz minimalnie umiejetnosc w skutecznym uzywaniu tarczy (5) natomiast obniza zauwazalnie wplyw przeciazenia na zmeczenie w walce (-50)",
         "effects": [
             ["_pb_stat", 0, 5],
@@ -692,10 +692,10 @@ const slowaData = [
             ["_pb_prop", "_live_i_encumberance_swing_fatigue_increased", -50],
         ],
     },
-    {
+    1120: {
         "name": "wladca ciemnosci",
         "cost": 40,
-        "runes": ["Nef", "Sol", "Io"],
+        "runes": [4, 12, 16],
         "description": "podnosi nieznacznie umiejetnosc w poslugiwaniu sie magia mroku (10) natomiast obniza troche ilosc many potrzebna do utrzymania przywolancow (-35) ponadto pozwala przywolac jednego dodatkowego, innego niz juz wezwany przywolanca (1)",
         "effects": [
             ["_pb_skill", 305, 10],
@@ -703,10 +703,10 @@ const slowaData = [
             ["_pb_prop", "_live_i_summons_mana_usage_increased", -35],
         ],
     },
-    {
+    1121: {
         "name": "kamiennoskory",
         "cost": 40,
-        "runes": ["Ko", "Eld", "Ith"],
+        "runes": [18, 2, 6],
         "description": "podnosi nieco odpornosc na obrazenia klute (18), nieco odpornosc na obrazenia ciete (18) oraz nieco odpornosc na obrazenia obuchowe (18)",
         "effects": [
             ["_pb_prop", "_obj_magic_i_res_impale", 18],
@@ -714,10 +714,10 @@ const slowaData = [
             ["_pb_prop", "_obj_magic_i_res_bludgeon", 18],
         ],
     },
-    {
+    1122: {
         "name": "antymagia",
         "cost": 40,
-        "runes": ["Ort", "Ko", "El"],
+        "runes": [9, 18, 1],
         "description": "podnosi zauwazalnie odpornosc na obrazenia magii powietrza (40), zauwazalnie odpornosc na obrazenia magii ziemi (40), zauwazalnie odpornosc na obrazenia magii ognia (40), zauwazalnie odpornosc na obrazenia magii wody (40), zauwazalnie odpornosc na obrazenia magii zycia (40) oraz zauwazalnie odpornosc na obrazenia magii smierci (40)",
         "effects": [
             ["_pb_prop", "_obj_magic_i_res_air", 40],
@@ -728,10 +728,10 @@ const slowaData = [
             ["_pb_prop", "_obj_magic_i_res_death", 40],
         ],
     },
-    {
+    1123: {
         "name": "lekkozbrojny",
         "cost": 40,
-        "runes": ["Eld", "Ral", "Lum"],
+        "runes": [2, 8, 17],
         "description": "podnosi minimalnie zrecznosc (5), minimalnie umiejetnosci walki wszystkimi bronmi (5), minimalnie umiejetnosc w unikaniu ciosow przeciwnika (5), ogromnie wplyw przeciazenia na zmeczenie w walce (100), bardzo ilosc przeciwnikow z ktorymi mozemy walczyc bez utraty sprawnosci (4) oraz minimalnie ilosc obrazen ktore pomijaja zbroje (10)",
         "effects": [
             ["_pb_stat", 1, 5],
@@ -742,10 +742,10 @@ const slowaData = [
             ["_pb_prop", "_live_i_ac_penetration", 10],
         ],
     },
-    {
+    1124: {
         "name": "mistrz harmonii",
         "cost": 40,
-        "runes": ["Eld", "Ko", "Shael"],
+        "runes": [2, 18, 13],
         "description": "podnosi minimalnie sile czarow wzmacniajacych (5) oraz minimalnie sile czarow oslabiajacych (5) natomiast obniza nieco ilosc many potrzebna do utrzymania aur (-30) ponadto pozwala utrzymywac jedna dodatkowa aure (1)",
         "effects": [
             ["_pb_prop", "_live_i_allow_extra_aura", 1],
@@ -754,20 +754,20 @@ const slowaData = [
             ["_pb_prop", "_live_i_spell_strenght_increased_16", 5],
         ],
     },
-    {
+    1125: {
         "name": "przewrotnosc",
         "cost": 10,
-        "runes": ["Tir", "Amn", "Hel"],
+        "runes": [3, 11, 15],
         "description": "podnosi minimalnie zrecznosc (5) ponadto zamienia ze soba umiejetnosci w parowaniu ciosow przeciwnika i w unikaniu ciosow przeciwnika",
         "effects": [
             ["_pb_stat", 1, 5],
             ["_pb_skill_swap", 23, 24],
         ],
     },
-    {
+    1201: {
         "name": "wszechstronny",
         "cost": 40,
-        "runes": ["Gul", "Dol", "Ral"],
+        "runes": [25, 14, 8],
         "description": "podnosi zauwazalnie wielkosc listy dozwolonych czarow (5), nieznacznie umiejetnosc w poslugiwaniu sie magia ognia (8), nieznacznie umiejetnosc w poslugiwaniu sie magia wody (8), nieznacznie umiejetnosc w poslugiwaniu sie magia ziemi (8) oraz nieznacznie umiejetnosc w poslugiwaniu sie magia powietrza (8) natomiast obniza troche koszt czarow (-40), nieco szybkosc odnawiania czarow (-100) oraz minimalnie szybkosc czarowania (-10)",
         "effects": [
             ["_pb_prop", "_live_i_spell_mana_increased", -40],
@@ -780,20 +780,20 @@ const slowaData = [
             ["_pb_skill", 301, 8],
         ],
     },
-    {
+    1202: {
         "name": "wampir",
         "cost": 40,
-        "runes": ["Tal", "Hel", "Gul"],
+        "runes": [7, 15, 25],
         "description": "podnosi troche ilosc zycia wykradanego przy atakach (40) ponadto sprawia ze nie mozesz byc magicznie uleczony (1)",
         "effects": [
             ["_pb_prop", "_live_i_life_steal", 40],
             ["_pb_prop", "_live_i_cannot_be_healed", 1],
         ],
     },
-    {
+    1203: {
         "name": "sama magia",
         "cost": 40,
-        "runes": ["Lum", "Ist", "Eld"],
+        "runes": [17, 24, 2],
         "description": "podnosi minimalnie szybkosc odnawiania czarow (20) oraz minimalnie szybkosc czarowania (20) natomiast obniza nieznacznie koszt czarow (-15), ogromnie szybkosc wyprowadzanych atakow (-1000) oraz ogromnie ilosc wyprowadzanych atakow specjalnych (-1000)",
         "effects": [
             ["_pb_prop", "_live_i_spell_mana_increased", -15],
@@ -803,10 +803,10 @@ const slowaData = [
             ["_pb_prop", "_live_i_special_attack_quickness", -1000],
         ],
     },
-    {
+    1204: {
         "name": "cien",
         "cost": 40,
-        "runes": ["Fal", "Thul", "Vex"],
+        "runes": [19, 10, 26],
         "description": "podnosi nieznacznie ilosc obrazen ktore pomijaja odpornosci (20), nieco ilosc obrazen ktore pomijaja zbroje (30), ogromnie wplyw wagi zbroi na szybkosc walki (100) oraz ogromnie wplyw wagi zbroi na czarowanie (500) natomiast obniza nieco odpornosc na obrazenia klute (-25), nieco odpornosc na obrazenia ciete (-25), nieco odpornosc na obrazenia obuchowe (-25), nieco odpornosc na obrazenia magii powietrza (-25), nieco odpornosc na obrazenia magii ziemi (-25), nieco odpornosc na obrazenia magii ognia (-25), nieco odpornosc na obrazenia magii wody (-25), nieco odpornosc na obrazenia magii zycia (-25) oraz nieco odpornosc na obrazenia magii smierci (-25)",
         "effects": [
             ["_pb_prop", "_live_i_resistance_penetration", 20],
@@ -824,4 +824,5 @@ const slowaData = [
             ["_pb_prop", "_obj_magic_i_res_death", -25],
         ],
     },
-]
+}
+const slowaData = new Map(Object.entries(_slowaData));

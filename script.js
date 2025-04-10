@@ -145,7 +145,7 @@ function populatePathSelect(guildData, isSemiGuild = false) {
 
 function populateWordsList() {
     const wordsList = document.getElementById('wordsList');
-    slowaData.forEach(word => {
+    slowaData.forEach((word, id) => {
         const div = document.createElement('div');
         div.className = 'tooltip-trigger relative'; // Added relative for tooltip positioning if needed
 
@@ -159,7 +159,7 @@ function populateWordsList() {
         const label = document.createElement('label');
         label.htmlFor = checkbox.id;
         label.className = 'block p-2 border rounded mb-1 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer transition-colors';
-        label.innerHTML = `${word.name} <span class="text-sm text-gray-500 dark:text-gray-400">(${word.cost})</span>`;
+        label.innerHTML = `${capitalize(word.name)} <span class="text-sm text-gray-500 dark:text-gray-400">(${word.cost})</span>`;
 
         const tooltip = document.createElement('div');
         // Added Tailwind classes for better default tooltip styling
@@ -397,7 +397,7 @@ function updateRacesAllowed(guild, isSemiGuild) {
 
 function formatRacesList(races) {
     // Capitalize first letter of each race
-    return races.map(race => race.charAt(0).toUpperCase() + race.slice(1)).join(', ');
+    return races.map(race => capitalize(race)).join(', ');
 }
 
 function updateActivePlayers() {
@@ -460,12 +460,6 @@ function updateSkillsSummary() {
         console.error("Missing one or more required elements for updateSkillsSummary.");
         return;
     }
-    // Guard against missing data
-    if (typeof guildsData === 'undefined' || typeof semiGuildsData === 'undefined' || typeof skills === 'undefined') {
-        console.error("Missing data for updateSkillsSummary.");
-        skillsSummaryDiv.innerHTML = '<p class="text-red-500">Błąd ładowania danych.</p>';
-        return;
-    }
     const gpEnabled = gpSkillsToggle.checked;
     // Find selected guilds and paths data
     const selectedMainGuild = guildSelect.value ?
@@ -488,8 +482,8 @@ function updateSkillsSummary() {
         skillsSummaryDiv.innerHTML = '<p class="text-center col-span-1 md:col-span-2 italic text-sm py-4">Wybierz gildię/ścieżkę lub włącz GP Skills, aby zobaczyć umiejętności.</p>';
         return;
     }
-    // Sort skills alphabetically for consistent display
-    const sortedSkillNames = Object.keys(modifiedSkills).sort((a, b) => a.localeCompare(b));
+    // Skille sa domyslnie dobrze posortowane po ID (jak w grze)
+    const sortedSkillNames = Object.keys(modifiedSkills);//.sort((a, b) => a.localeCompare(b));
     sortedSkillNames.forEach(skillName => {
         let finalValue = Math.max(0, Math.min(modifiedSkills[skillName], 200)); // Clamp to 0-200
         // Ensure baseSkills considers the GP toggle state correctly before word mods
@@ -500,7 +494,7 @@ function updateSkillsSummary() {
         const nameElement = document.createElement('div');
         nameElement.className = 'flex justify-between items-baseline mb-0.5 text-sm'; // Further reduced margin
         nameElement.innerHTML = `
-  <span class="truncate pr-1">${skillName.charAt(0).toUpperCase() + skillName.slice(1)}</span>
+  <span class="truncate pr-1">${capitalize(skillName)}</span>
   <span class="font-semibold whitespace-nowrap">${finalValue}</span>
   `;
         if (difference !== 0) {
@@ -530,7 +524,13 @@ function updateSkillsSummary() {
 }
 
 function getGuildSkills(selectedMainPath, selectedSemiPath, gpEnabled) {
-    const combinedGuildSkills = {};
+    const combinedGuildSkills = new Map(); // Use Map for better performance with large datasets
+    // 2. Incorporate GP skills based on the toggle state
+    if (gpEnabled) {
+        skills.forEach((skillData, id) => {
+            combinedGuildSkills[skillData.name] = Math.max(combinedGuildSkills[skillData.name] || 0, skillData.gp)
+        })
+    }
     // 1. Combine skills from selected main and semi guild paths, taking the higher value
     if (selectedMainPath && selectedMainPath.skills) {
         for (const skill in selectedMainPath.skills) {
@@ -542,22 +542,20 @@ function getGuildSkills(selectedMainPath, selectedSemiPath, gpEnabled) {
             combinedGuildSkills[skill] = Math.max(combinedGuildSkills[skill] || 0, selectedSemiPath.skills[skill]);
         }
     }
-    // 2. Incorporate GP skills based on the toggle state
-    if (gpEnabled) {
-        for (const [skill, skillData] of Object.entries(skills)) {
-            combinedGuildSkills[skill] = Math.max(combinedGuildSkills[skill] || 0, skillData.gp);
-        }
-    }
-    return combinedGuildSkills;
+    return combinedGuildSkills
 }
 
 function skillIdToName(id) {
-    const skillKey = Object.keys(skills).find(key => skills[key].id === id);
-    return skillKey || null;
+    return skills.get("" + id).name
 }
 
 function getWordByName(name) {
-    return slowaData.find(word => word.name === name);
+    for (const [id, word] of slowaData.entries()) {
+        if (word.name === name) {
+            return word;
+        }
+    }
+    return null;
 }
 
 function calculateModifiedSkills(baseSkills) {
@@ -630,11 +628,10 @@ function calculateRuneCosts(selectedWords) {
     selectedWords.forEach(checkbox => {
         const wordName = checkbox.value;
         const word = getWordByName(wordName)
-        word.runes.forEach(rune => {
-            runeCounts[rune] = (runeCounts[rune] || 0) + 1;
+        word.runes.forEach(id => {
+            runeCounts[id] = (runeCounts[id] || 0) + 1;
         })
     })
-
 
     return runeCounts
 }
@@ -645,14 +642,12 @@ function generateRuneCostsHtml(runeCounts) {
     html += '<h4 class="font-bold mb-2">Wymagane runy:</h4>';
     html += '<div class="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5">';
 
-    // Sort runes alphabetically for better readability
-    const sortedRunes = Object.keys(runeCounts).sort();
-
-    sortedRunes.forEach(rune => {
+    runesData.forEach((rune, id) => {
+        if (!runeCounts[id]) return; // Skip if rune count is 0
         html += `
             <div class="dark:bg-gray-700 rounded p-2 text-center shadow-sm border border-gray-300 dark:border-gray-800">
-                <span class="font-medium">${rune}</span>
-                <span class="ml-1 text-gray-500 dark:text-gray-300">x${runeCounts[rune]}</span>
+                <span class="font-medium">${capitalize(rune.name)}</span>
+                <span class="ml-1 text-gray-500 dark:text-gray-300">x${runeCounts[id]}</span>
             </div>
         `;
     });
@@ -678,10 +673,10 @@ function updateEffectsSummary() {
 
     selectedWords.forEach(checkbox => {
         const wordName = checkbox.value;
-        const word = slowaData.find(w => w.name === wordName);
+        const word = getWordByName(wordName);
         if (word) {
             totalCost += parseInt(word.cost);
-            selectedWordItems.push(`<li class="mb-2"><span class="font-medium">${wordName}</span> (${word.cost}) - ${word.description}</li>`);
+            selectedWordItems.push(`<li class="mb-2"><span class="font-medium">${capitalize(wordName)}</span> (${word.cost}) - ${word.description}</li>`);
         }
     });
 
@@ -805,7 +800,7 @@ function exportToMarkdown() {
         markdown += "## Podsumowanie Umiejętności\n";
         const sortedSkills = Object.entries(buildData.finalSkills).sort(([, a], [, b]) => b - a); // Sort descending by value
         sortedSkills.forEach(([skill, value]) => {
-            markdown += `- ${skill.charAt(0).toUpperCase() + skill.slice(1)}: ${value}\n`;
+            markdown += `- ${capitalize(skill)}: ${value}\n`;
         });
         markdown += "\n";
     }
@@ -1014,4 +1009,8 @@ function generateAndShowShareableLink() {
     } else {
         alert("Wystąpił błąd podczas generowania linku.");
     }
+}
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
 }
