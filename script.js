@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
 const buildData = {
     selectedWords: ["Biegłość w broni długiej"], // Example words
     baseAttackSpeed: 1.2,
-    attackSpeedModifiers: { speedBonus: 0.1, speedMalus: 0.05 },
+    attackSpeedModifiers: {speedBonus: 0.1, speedMalus: 0.05},
     averageDamage: 50,
     baseHP: 1000,
     extraHP: 200,
@@ -182,60 +182,54 @@ function populatePathSelect(guildData, isSemiGuild = false) {
 
 function populateWordsList() {
     const wordsList = document.getElementById('wordsList');
-    // Upewnij się, że slowaData jest dostępne
-    if (typeof slowaData !== 'undefined') {
-        slowaData.forEach(word => {
-            const div = document.createElement('div');
-            div.className = 'tooltip-trigger relative'; // Added relative for tooltip positioning if needed
+    slowaData.forEach(word => {
+        const div = document.createElement('div');
+        div.className = 'tooltip-trigger relative'; // Added relative for tooltip positioning if needed
 
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.className = 'custom-checkbox';
-            checkbox.id = `word_${word.name.replace(/\s+/g, '_')}`; // Ensure valid ID
-            checkbox.value = word.name;
-            checkbox.dataset.cost = word.cost;
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.className = 'custom-checkbox';
+        checkbox.id = `word_${word.name.replace(/\s+/g, '_')}`; // Ensure valid ID
+        checkbox.value = word.name;
+        checkbox.dataset.cost = word.cost;
 
-            const label = document.createElement('label');
-            label.htmlFor = checkbox.id;
-            label.className = 'block p-2 border rounded mb-1 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer transition-colors';
-            label.innerHTML = `${word.name} <span class="text-sm text-gray-500 dark:text-gray-400">(${word.cost})</span>`;
+        const label = document.createElement('label');
+        label.htmlFor = checkbox.id;
+        label.className = 'block p-2 border rounded mb-1 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer transition-colors';
+        label.innerHTML = `${word.name} <span class="text-sm text-gray-500 dark:text-gray-400">(${word.cost})</span>`;
 
-            const tooltip = document.createElement('div');
-            // Added Tailwind classes for better default tooltip styling
-            tooltip.className = 'tooltip absolute left-full top-0 ml-2 p-2 rounded bg-gray-800 text-white text-xs shadow-lg invisible opacity-0 transition-opacity duration-300 z-10 w-64'; // Adjust width (w-64) as needed
-            tooltip.innerHTML = `<p>${word.description}</p>`;
+        const tooltip = document.createElement('div');
+        // Added Tailwind classes for better default tooltip styling
+        tooltip.className = 'tooltip absolute left-full top-0 ml-2 p-2 rounded bg-gray-800 text-white text-xs shadow-lg invisible opacity-0 transition-opacity duration-300 z-10 w-64'; // Adjust width (w-64) as needed
+        tooltip.innerHTML = `<p>${word.description}</p>`;
 
-            div.appendChild(checkbox);
-            div.appendChild(label);
-            div.appendChild(tooltip);
-            wordsList.appendChild(div);
+        div.appendChild(checkbox);
+        div.appendChild(label);
+        div.appendChild(tooltip);
+        wordsList.appendChild(div);
 
-            // Add hover listeners to the trigger for the tooltip
-            div.addEventListener('mouseenter', () => {
-                tooltip.classList.remove('invisible', 'opacity-0');
-                tooltip.classList.add('visible', 'opacity-100');
-            });
-            div.addEventListener('mouseleave', () => {
-                tooltip.classList.remove('visible', 'opacity-100');
-                tooltip.classList.add('invisible', 'opacity-0');
-            });
-
-
-            checkbox.addEventListener('change', function () {
-                if (this.checked) {
-                    label.classList.add('selected-item', '!bg-indigo-500', 'dark:!bg-indigo-700', 'text-white'); // Use !important or more specific selectors if needed
-                } else {
-                    label.classList.remove('selected-item', '!bg-indigo-500', 'dark:!bg-indigo-700', 'text-white');
-                }
-                updateSelectedWordCount();
-                updateSkillsSummary(); // Recalculate skills on word change
-                updateEffectsSummary();
-            });
+        // Add hover listeners to the trigger for the tooltip
+        div.addEventListener('mouseenter', () => {
+            tooltip.classList.remove('invisible', 'opacity-0');
+            tooltip.classList.add('visible', 'opacity-100');
         });
-    } else {
-        console.error("slowaData nie jest zdefiniowane!");
-        wordsList.innerHTML = '<p>Błąd ładowania danych słów.</p>';
-    }
+        div.addEventListener('mouseleave', () => {
+            tooltip.classList.remove('visible', 'opacity-100');
+            tooltip.classList.add('invisible', 'opacity-0');
+        });
+
+
+        checkbox.addEventListener('change', function () {
+            if (this.checked) {
+                label.classList.add('selected-item', '!bg-indigo-500', 'dark:!bg-indigo-700', 'text-white'); // Use !important or more specific selectors if needed
+            } else {
+                label.classList.remove('selected-item', '!bg-indigo-500', 'dark:!bg-indigo-700', 'text-white');
+            }
+            updateSelectedWordCount();
+            updateSkillsSummary(); // Recalculate skills on word change
+            updateEffectsSummary();
+        });
+    });
 }
 
 // --- Event Listeners Setup ---
@@ -542,7 +536,6 @@ function updateActivePlayers() {
     }
 }
 
-
 function updateSelectedWordCount() {
     const selectedWords = document.querySelectorAll('#wordsList input[type="checkbox"]:checked');
     document.getElementById('selectedWordCount').textContent = selectedWords.length;
@@ -651,139 +644,60 @@ function getGuildSkills(selectedMainPath, selectedSemiPath, gpEnabled) {
     return combinedGuildSkills;
 }
 
+function skillIdToName(id) {
+    const skillKey = Object.keys(skills).find(key => skills[key].id === id);
+    return skillKey || null;
+}
+
 function calculateModifiedSkills(baseSkills) {
-    const modifiedSkills = { ...baseSkills }; // Work on a copy
+    const modifiedSkills = {...baseSkills}; // Work on a copy
     const selectedWords = document.querySelectorAll('#wordsList input[type="checkbox"]:checked');
 
-    if (typeof slowaData !== 'undefined') {
-        selectedWords.forEach(checkbox => {
-            const wordName = checkbox.value;
-            const word = slowaData.find(w => w.name === wordName);
-
-            if (word && word.effects) {
-                word.effects.forEach(effect => {
-                    // Skip special effects that don't modify skills directly here
-                    if (effect.type === 'special' && effect.description.includes('zamienia ze soba')) {
-                        // Handle swap logic (existing)
-                        if (effect.description === "zamienia ze soba umiejetnosci w skutecznym uzywaniu tarczy i w walce dwiema bronmi jednoczesnie") {
-                            const skill1 = "tarczownictwo";
-                            const skill2 = "walka dwiema bronmi";
-                            const val1 = baseSkills[skill1] || 0;
-                            const val2 = baseSkills[skill2] || 0;
-                            const diff = val1 - val2;
-                            modifiedSkills[skill1] = (modifiedSkills[skill1] || 0) - diff;
-                            modifiedSkills[skill2] = (modifiedSkills[skill2] || 0) + diff;
-                        } else if (effect.description === "zamienia ze soba umiejetnosci w poslugiwaniu sie magia zycia i w poslugiwaniu sie magia mroku") {
-                            const skill1 = "magia zycia";
-                            const skill2 = "magia mroku";
-                            const val1 = baseSkills[skill1] || 0;
-                            const val2 = baseSkills[skill2] || 0;
-                            const diff = val1 - val2;
-                            modifiedSkills[skill1] = (modifiedSkills[skill1] || 0) - diff;
-                            modifiedSkills[skill2] = (modifiedSkills[skill2] || 0) + diff;
-                        } else if (effect.description === "zamienia ze soba umiejetnosci w parowaniu ciosow przeciwnika i w unikaniu ciosow przeciwnika") {
-                            // TODO: Implement swap logic for parowanie/uniki if needed
-                            console.warn("Swap effect for parowanie/uniki not fully implemented yet.");
-                        }
-                        return; // Continue to next effect after handling swap
-                    }
-
-                    // Skip effects that are not increases or decreases or are special non-swap ones
-                    if (effect.type !== 'increase' && effect.type !== 'decrease') {
-                        // console.log(`Skipping non-skill mod effect for word "${wordName}": ${effect.description || effect.stat}`);
-                        return;
-                    }
-
-                    const effectValue = parseInt(effect.value);
-                    if (isNaN(effectValue)) {
-                        console.warn(`Invalid effect value for word "${wordName}", stat "${effect.stat}": ${effect.value}`);
-                        return; // Skip if value is not a number
-                    }
-
-                    const stat = effect.stat.toLowerCase().trim(); // Normalize stat name
-
-                    // --- Start Mapping Logic ---
-                    let targetSkill = null;
-
-                    // 1. Direct skill name match (e.g., "wytrzymalosc", "sile", "zrecznosc" - but these are attributes, not skills usually)
-                    if (modifiedSkills.hasOwnProperty(stat)) {
-                        targetSkill = stat;
-                    }
-                    // 2. Broad categories
-                    else if (stat === "umiejetnosci walki wszystkimi bronmi") {
-                        const combatSkills = ["miecze", "sztylety", "topory", "mloty", "wlocznie", "szable", "bronie drzewcowe", "bronie lancuchowe", "maczugi", "bicze", "luki", "kusze"]; // Exclude walka bez broni?
+    selectedWords.forEach(checkbox => {
+        const wordName = checkbox.value;
+        const word = slowaData.find(w => w.name === wordName)
+        let effectValue
+        if (word && word.effects) {
+            word.effects.forEach(effect => {
+                const effectType = effect[0]
+                console.log(`Processing effect type: ${effectType} for word: ${wordName}`)
+                switch (effectType) {
+                    case '_pb_skill':
+                        const targetSkill = skillIdToName(effect[1])
+                        effectValue = parseInt(effect[2])
+                        modifiedSkills[targetSkill] = (modifiedSkills[targetSkill] || 0) + effectValue
+                        break
+                    case '_pb_skill_weapon':
+                        effectValue = parseInt(effect[1]);
+                        const combatSkills = ["miecze", "sztylety", "topory", "mloty", "wlocznie", "szable", "bronie drzewcowe", "bronie lancuchowe", "maczugi", "bicze", "luki", "kusze"];
                         combatSkills.forEach(skill => {
                             if (modifiedSkills.hasOwnProperty(skill)) {
                                 modifiedSkills[skill] = (modifiedSkills[skill] || 0) + effectValue;
                             }
-                        });
-                        return; // Handled multiple skills, continue to next effect
-                    } else if (stat === "umiejetnosci ze wszystkich szkol magii") {
-                        const magicSkills = ["magia ognia", "magia wody", "magia ziemi", "magia powietrza", "magia mroku", "iluzja", "przemiana", "przywolywanie", "magia runiczna", "czarodziejstwo", "magia zycia", "mistycyzm", "zaklinanie"]; // Ensure this list is complete
+                        })
+                        break
+                    case '_pb_skill_magic_all':
+                        effectValue = parseInt(effect[1]);
+                        const magicSkills = ["magia ognia", "magia wody", "magia ziemi", "magia powietrza", "magia mroku", "iluzja", "przemiana", "przywolywanie", "magia runiczna", "czarodziejstwo", "magia zycia", "mistycyzm", "zaklinanie"];
                         magicSkills.forEach(skill => {
                             if (modifiedSkills.hasOwnProperty(skill)) {
                                 modifiedSkills[skill] = (modifiedSkills[skill] || 0) + effectValue;
                             }
-                        });
-                        return; // Handled multiple skills, continue to next effect
-                    }
-                    // 3. Specific descriptive mappings to skill keys
-                    else if (stat === "umiejetnosc w ocenianiu wlasnosci przedmiotow") targetSkill = "ocena obiektu";
-                    else if (stat === "umiejetnosc w szacowaniu wartosci przedmiotow") targetSkill = "szacowanie";
-                    else if (stat === "umiejetnosc w zawieraniu korzystnych transakcji handlowych") targetSkill = "targowanie sie";
-                    else if (stat === "umiejetnosc w wydobywaniu mineralow spod ziemi") targetSkill = "gornictwo";
-                    else if (stat === "umiejetnosc w metalurgii") targetSkill = "metalurgia";
-                    else if (stat === "umiejetnosc w walce bez broni") targetSkill = "walka bez broni";
-                    else if (stat === "umiejetnosc w skutecznym uzywaniu tarczy") targetSkill = "tarczownictwo";
-                    else if (stat === "umiejetnosc w parowaniu ciosow przeciwnika") targetSkill = "parowanie";
-                    else if (stat === "umiejetnosc w unikaniu ciosow przeciwnika") targetSkill = "uniki";
-                    else if (stat === "umiejetnosc w walce dwiema bronmi jednoczesnie") targetSkill = "walka dwiema bronmi";
-                    else if (stat === "umiejetnosc w walce z konskiego grzbietu") targetSkill = "walka konna";
-                    else if (stat === "umiejetnosc w walce w szyku") targetSkill = "walke w szyku"; // Uwaga na 'e'
-                    else if (stat === "umiejetnosc w wywieraniu wplywu na innych") targetSkill = "zdolnosci przywodcze";
-                    else if (stat === "umiejetnosc w poslugiwaniu sie magia ognia") targetSkill = "magia ognia";
-                    else if (stat === "umiejetnosc w poslugiwaniu sie magia powietrza") targetSkill = "magia powietrza";
-                    else if (stat === "umiejetnosc w poslugiwaniu sie magia ziemi") targetSkill = "magia ziemi";
-                    else if (stat === "umiejetnosc w poslugiwaniu sie magia wody") targetSkill = "magia wody";
-                    else if (stat === "umiejetnosc w poslugiwaniu sie magia zycia") targetSkill = "magia zycia"; // FIX for Kaznodzieja
-                    else if (stat === "umiejetnosc w poslugiwaniu sie magia mroku") targetSkill = "magia mroku";
-                    else if (stat === "umiejetnosc w poslugiwaniu sie magia przemiany") targetSkill = "przemiana"; // Uwaga na 'e'
-                    else if (stat === "umiejetnosc w mistycyzmie") targetSkill = "mistycyzm"; // FIX for Kaznodzieja, Mistycyzm
-                    else if (stat === "umiejetnosc w zaklinaniu") targetSkill = "zaklinanie";
-                    else if (stat === "umiejetnosc w magii tworzenia i przywolywania") targetSkill = "przywolywanie";
-                    else if (stat === "umiejetnosc w poslugiwaniu sie magia iluzji") targetSkill = "iluzja"; // FIX for Iluzja (uwaga na 'e')
-                    else if (stat === "umiejetnosc w rozpraszaniu zaklec") targetSkill = "rozpraszanie";
-                    else if (stat === "umiejetnosc w znajomosci i uzywaniu magii") targetSkill = "czarodziejstwo";
-                    else if (stat === "umiejetnosc w pisaniu i uzywaniu run") targetSkill = "magia runiczna";
-                    else if (stat === "umiejetnosc w koncentrowaniu swoich magicznych zdolnosci") targetSkill = "koncentracja"; // FIX for koncentracje -> koncentracja
-                    else if (stat === "umiejetnosc w koncentrowaniu swoich magicznych zdolnosci podczas walki") targetSkill = "koncentracja w walce";
-                    else if (stat === "umiejetnosc w warzeniu i rozpoznawaniu mikstur") targetSkill = "alchemia";
-                    else if (stat === "umiejetnosc w znajdowaniu i rozpoznawaniu ziol") targetSkill = "zielarstwo";
-                    else if (stat === "umiejetnosc w wyczuwaniu slabosci wroga") targetSkill = "wyczucie slabosci"; // Dodane mapowanie
-
-                    // --- End Mapping Logic ---
-
-                    // Apply the modification if a target skill was found
-                    if (targetSkill && modifiedSkills.hasOwnProperty(targetSkill)) {
-                        modifiedSkills[targetSkill] = (modifiedSkills[targetSkill] || 0) + effectValue;
-                        // console.log(`Applied effect: ${wordName} -> ${stat} (${effectValue}) mapped to ${targetSkill}. New value: ${modifiedSkills[targetSkill]}`);
-                    } else if (targetSkill) {
-                        // This case means the mapping exists, but the base skill is 0 or missing from current selections
-                        // We could potentially add the skill if the effect is positive, but might clutter the list.
-                        // For now, only modify existing skills.
-                        // console.log(`Skill "${targetSkill}" (from "${stat}") not found in current base skills for word "${wordName}". Effect ignored.`);
-                    } else {
-                        // Stat wasn't mapped to a known skill and isn't a direct match - likely an attribute or unhandled effect.
-                        if (effect.type === 'increase' || effect.type === 'decrease') { // Only warn for actual +/- effects
-                            // console.warn(`Unhandled skill/stat modification for word "${wordName}": "${stat}" (${effectValue}). No mapping found.`);
-                        }
-                    }
-                });
-            }
-        });
-    } else {
-        console.error("slowaData nie jest zdefiniowane!");
-    }
+                        })
+                        break
+                    case '_pb_skill_swap':
+                        const skill1 = skillIdToName(effect[1]);
+                        const skill2 = skillIdToName(effect[2]);
+                        const val1 = baseSkills[skill1] || 0;
+                        const val2 = baseSkills[skill2] || 0;
+                        const diff = val1 - val2;
+                        modifiedSkills[skill1] = (modifiedSkills[skill1] || 0) - diff;
+                        modifiedSkills[skill2] = (modifiedSkills[skill2] || 0) + diff;
+                        break
+                }
+            });
+        }
+    });
 
     // Ensure skills don't go below 0 (or other floor if needed)
     for (const skill in modifiedSkills) {
@@ -800,7 +714,7 @@ function calculateRuneCosts(selectedWords) {
     // Check if slowaRuny is defined
     if (typeof slowaRuny === 'undefined') {
         console.error("slowaRuny is not defined!");
-        return { html: '', totalRuneCount: 0 };
+        return {html: '', totalRuneCount: 0};
     }
 
     // Initialize an object to count runes
@@ -821,7 +735,7 @@ function calculateRuneCosts(selectedWords) {
 
     // If no runes are required, return empty string
     if (totalRuneCount === 0) {
-        return { html: '', totalRuneCount: 0 };
+        return {html: '', totalRuneCount: 0};
     }
 
     // Create HTML for rune display
@@ -843,7 +757,7 @@ function calculateRuneCosts(selectedWords) {
 
     html += '</div></div>';
 
-    return { html, totalRuneCount };
+    return {html, totalRuneCount};
 }
 
 // Update the updateEffectsSummary function to include rune costs
@@ -876,7 +790,7 @@ function updateEffectsSummary() {
     html = `<p class="mb-2 font-bold">Łączny koszt: ${totalCost}</p>` + html;
 
     // Add rune cost information
-    const { html: runeHtml, totalRuneCount } = calculateRuneCosts(selectedWords);
+    const {html: runeHtml, totalRuneCount} = calculateRuneCosts(selectedWords);
     if (totalRuneCount > 0) {
         html += runeHtml;
     }
@@ -903,7 +817,7 @@ function getCurrentBuildData() {
         selectedWordCheckboxes.forEach(cb => {
             const word = slowaData.find(w => w.name === cb.value);
             if (word) {
-                selectedWords.push({ name: word.name, cost: word.cost, description: word.description });
+                selectedWords.push({name: word.name, cost: word.cost, description: word.description});
                 totalCost += parseInt(word.cost) || 0;
             }
         });
@@ -915,10 +829,10 @@ function getCurrentBuildData() {
     const finalSkills = calculateModifiedSkills(getGuildSkills(selectedMainPath, selectedSemiPath, gpEnabled));
 
     return {
-        mainGuild: selectedMainGuild ? { name: selectedMainGuild.name, code: selectedMainGuild.code } : null,
-        mainPath: selectedMainPath ? { name: selectedMainPath.name } : null,
-        semiGuild: selectedSemiGuild ? { name: selectedSemiGuild.name, code: selectedSemiGuild.code } : null,
-        semiPath: selectedSemiPath ? { name: selectedSemiPath.name } : null,
+        mainGuild: selectedMainGuild ? {name: selectedMainGuild.name, code: selectedMainGuild.code} : null,
+        mainPath: selectedMainPath ? {name: selectedMainPath.name} : null,
+        semiGuild: selectedSemiGuild ? {name: selectedSemiGuild.name, code: selectedSemiGuild.code} : null,
+        semiPath: selectedSemiPath ? {name: selectedSemiPath.name} : null,
         words: selectedWords,
         totalWordCost: totalCost,
         finalSkills: finalSkills,
@@ -1010,7 +924,7 @@ function exportToJson() {
 }
 
 function downloadFile(content, filename, contentType) {
-    const blob = new Blob([content], { type: contentType });
+    const blob = new Blob([content], {type: contentType});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
