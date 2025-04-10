@@ -101,8 +101,6 @@ function calculateAllStats() {
     setStatsInUI(stats);
 }
 
-let selectedMainGuildPath = null;
-
 // --- Funkcje populacji (bez zmian) ---
 function populateGuildSelect() {
     const guildSelect = document.getElementById('guildSelect');
@@ -563,7 +561,7 @@ function updateSkillsSummary() {
         return;
     }
     // Guard against missing data
-    if (typeof guildsData === 'undefined' || typeof semiGuildsData === 'undefined' || typeof skillsGp === 'undefined') {
+    if (typeof guildsData === 'undefined' || typeof semiGuildsData === 'undefined' || typeof skills === 'undefined') {
         console.error("Missing data for updateSkillsSummary.");
         skillsSummaryDiv.innerHTML = '<p class="text-red-500">Błąd ładowania danych.</p>';
         return;
@@ -579,33 +577,9 @@ function updateSkillsSummary() {
     const selectedSemiPath = (selectedSemiGuild && selectedSemiGuild.semipaths && semiPathSelect.value)
         ?
         selectedSemiGuild.semipaths.find(sp => sp.name === semiPathSelect.value) : null;
-    // --- Core Logic for Combining Skills ---
-    let baseSkills = {};
-    const combinedGuildSkills = {};
-    // 1. Combine skills from selected main and semi guild paths, taking the higher value
-    if (selectedMainPath && selectedMainPath.skills) {
-        for (const skill in selectedMainPath.skills) {
-            combinedGuildSkills[skill] = Math.max(combinedGuildSkills[skill] || 0, selectedMainPath.skills[skill]);
-        }
-    }
-    if (selectedSemiPath && selectedSemiPath.skills) {
-        for (const skill in selectedSemiPath.skills) {
-            combinedGuildSkills[skill] = Math.max(combinedGuildSkills[skill] || 0, selectedSemiPath.skills[skill]);
-        }
-    }
-    // 2. Incorporate GP skills based on the toggle state
-    if (gpEnabled) {
-        // GP ON: Merge GP and Guild skills, taking the higher value for overlaps
-        baseSkills = { ...skillsGp };
-        for (const skill in combinedGuildSkills) {
-            baseSkills[skill] = Math.max(baseSkills[skill] || 0, combinedGuildSkills[skill]);
-        }
-    } else {
-        // GP OFF: Only use skills present in selected guilds.
-        baseSkills = { ...combinedGuildSkills };
-    }
-    // --- End Core Logic ---
+    const baseSkills = getGuildSkills(selectedMainPath, selectedSemiPath, gpEnabled);
     const modifiedSkills = calculateModifiedSkills(baseSkills);
+
     // Calculate final skills
     // --- Display Logic ---
     skillsSummaryDiv.innerHTML = '';
@@ -655,8 +629,28 @@ function updateSkillsSummary() {
     });
 }
 
-// --- Calculate Modified Skills ---
-// --- ZMIANY W MAPOWANIU STATYSTYK ---
+function getGuildSkills(selectedMainPath, selectedSemiPath, gpEnabled) {
+    const combinedGuildSkills = {};
+    // 1. Combine skills from selected main and semi guild paths, taking the higher value
+    if (selectedMainPath && selectedMainPath.skills) {
+        for (const skill in selectedMainPath.skills) {
+            combinedGuildSkills[skill] = Math.max(combinedGuildSkills[skill] || 0, selectedMainPath.skills[skill]);
+        }
+    }
+    if (selectedSemiPath && selectedSemiPath.skills) {
+        for (const skill in selectedSemiPath.skills) {
+            combinedGuildSkills[skill] = Math.max(combinedGuildSkills[skill] || 0, selectedSemiPath.skills[skill]);
+        }
+    }
+    // 2. Incorporate GP skills based on the toggle state
+    if (gpEnabled) {
+        for (const [skill, skillData] of Object.entries(skills)) {
+            combinedGuildSkills[skill] = Math.max(combinedGuildSkills[skill] || 0, skillData.gp);
+        }
+    }
+    return combinedGuildSkills;
+}
+
 function calculateModifiedSkills(baseSkills) {
     const modifiedSkills = { ...baseSkills }; // Work on a copy
     const selectedWords = document.querySelectorAll('#wordsList input[type="checkbox"]:checked');
@@ -796,10 +790,6 @@ function calculateModifiedSkills(baseSkills) {
         if (modifiedSkills[skill] < 0) {
             modifiedSkills[skill] = 0;
         }
-        // Optional: Cap skills at 100 or other max value if needed
-        // if (modifiedSkills[skill] > 100) {
-        //     modifiedSkills[skill] = 100;
-        // }
     }
 
     return modifiedSkills;
@@ -919,35 +909,10 @@ function getCurrentBuildData() {
         });
     }
 
-
     // Recalculate base and modified skills to ensure consistency
     const gpEnabled = document.getElementById('gpSkillsToggle').checked;
-    let baseSkills = {};
-    const combinedGuildSkills = {};
-    if (selectedMainPath && selectedMainPath.skills) {
-        for (const skill in selectedMainPath.skills) {
-            combinedGuildSkills[skill] = Math.max(combinedGuildSkills[skill] || 0, selectedMainPath.skills[skill]);
-        }
-    }
-    if (selectedSemiPath && selectedSemiPath.skills) {
-        for (const skill in selectedSemiPath.skills) {
-            combinedGuildSkills[skill] = Math.max(combinedGuildSkills[skill] || 0, selectedSemiPath.skills[skill]);
-        }
-    }
-    if (typeof skillsGp !== 'undefined') {
-        if (gpEnabled) {
-            baseSkills = { ...skillsGp };
-            for (const skill in combinedGuildSkills) {
-                baseSkills[skill] = Math.max(baseSkills[skill] || 0, combinedGuildSkills[skill]);
-            }
-        } else {
-            baseSkills = { ...combinedGuildSkills };
-        }
-    } else {
-        baseSkills = { ...combinedGuildSkills };
-    }
 
-    const finalSkills = calculateModifiedSkills(baseSkills);
+    const finalSkills = calculateModifiedSkills(getGuildSkills(selectedMainPath, selectedSemiPath, gpEnabled));
 
     return {
         mainGuild: selectedMainGuild ? { name: selectedMainGuild.name, code: selectedMainGuild.code } : null,
@@ -1044,7 +1009,6 @@ function exportToJson() {
     downloadFile(jsonString, 'build_postaci.json', 'application/json');
 }
 
-// NOWOŚĆ: Helper do pobierania plików
 function downloadFile(content, filename, contentType) {
     const blob = new Blob([content], { type: contentType });
     const url = URL.createObjectURL(blob);
@@ -1055,24 +1019,6 @@ function downloadFile(content, filename, contentType) {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-}
-
-/**
- * Zbiera aktualną konfigurację bildu z interfejsu użytkownika.
- */
-function getCurrentBuildData() {
-    const selectedWords = Array.from(document.querySelectorAll('#wordsList input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.value);
-
-    const build = {
-        guild: document.getElementById('guildSelect').value || null, // Zapisz null jeśli puste
-        path: document.getElementById('pathSelect').value || null,
-        semiGuild: document.getElementById('semiGuildSelect').value || null,
-        semiPath: document.getElementById('semiPathSelect').value || null,
-        words: selectedWords
-    };
-    console.log("Zebrane dane bildu:", build);
-    return build;
 }
 
 /**
@@ -1265,16 +1211,3 @@ function generateAndShowShareableLink() {
         alert("Wystąpił błąd podczas generowania linku.");
     }
 }
-// --- Koniec funkcji do obsługi linków udostępniania ---
-
-
-
-
-
-
-
-
-
-// Koniec skryptu
-// --- Koniec funkcji do obsługi linków udostępniania ---
-
