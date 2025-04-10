@@ -100,37 +100,6 @@ function calculateAllStats() {
 
     setStatsInUI(stats);
 }
-// --- Load Build from URL ---
-function loadBuildFromURL() {
-    // Existing logic ...
-
-    // Call calculateAllStats at the end of loadBuildFromURL
-    calculateAllStats();
-}
-
-// --- Functions populacji (bez zmian) ---
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 let selectedMainGuildPath = null;
 
@@ -374,11 +343,6 @@ function setupEventListeners() {
     exportMdButton.addEventListener('click', exportToMarkdown);
     exportJsonButton.addEventListener('click', exportToJson);
     generateLinkButton.addEventListener('click', generateAndShowShareableLink);
-}
-function applyDarkModeToRuneCosts() {
-    const selectedWords = [...document.querySelectorAll('#wordsList input[type=checkbox]:checked')];
-    const { html } = calculateRuneCosts(selectedWords);
-    document.getElementById('runeCostsSummary').innerHTML = html;
 }
 
 // --- Dark Mode Setup ---
