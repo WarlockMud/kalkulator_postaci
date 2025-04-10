@@ -1,14 +1,136 @@
 // Main App Logic
 document.addEventListener('DOMContentLoaded', function () {
+    setupEventListeners();
+    setupDarkMode();
+    setupGpToggle();
     populateGuildSelect();
     populateSemiGuildSelect();
     populateWordsList();
-    setupEventListeners();
-    setupDarkMode();
-    setupGpToggle(); // <-- Inicjalizacja przełącznika GP Skills
-    updateSkillsSummary(); // <-- Wywołaj raz na starcie, aby uwzględnić stan GP Toggle
-    loadBuildFromURL();
+    loadBuildFromURL(); // Load existing build from URL
+    calculateAllStats();
 });
+
+// Example build data (replace with actual logic later)
+const buildData = {
+    selectedWords: ["Biegłość w broni długiej"], // Example words
+    baseAttackSpeed: 1.2,
+    attackSpeedModifiers: { speedBonus: 0.1, speedMalus: 0.05 },
+    averageDamage: 50,
+    baseHP: 1000,
+    extraHP: 200,
+    baseHPRegen: 5,
+    extraHPRegen: 2,
+    baseMana: 500,
+    extraMana: 100,
+    baseManaRegen: 3,
+    extraManaRegen: 1,
+};
+
+// --- UI Update Functions ---
+function setStatsInUI(stats) {
+    document.getElementById('totalRunesRequired').textContent = stats.totalRunesRequired;
+    document.getElementById('attacksPerSecond').textContent = stats.attacksPerSecond.toFixed(2);
+    document.getElementById('dps').textContent = stats.dps.toFixed(2);
+    document.getElementById('hp').textContent = stats.hp;
+    document.getElementById('hpRegen').textContent = stats.hpRegen.toFixed(2);
+    document.getElementById('mana').textContent = stats.mana;
+    document.getElementById('manaRegen').textContent = stats.manaRegen.toFixed(2);
+}
+
+// --- Calculation Functions ---
+function calculateTotalRunesRequired(selectedWords) {
+    let totalRunes = 0;
+    selectedWords.forEach(wordName => {
+        if (slowaRuny[wordName]) {
+            totalRunes += slowaRuny[wordName].length;
+        }
+    });
+    return totalRunes;
+}
+
+function calculateAttacksPerSecond(baseAttackSpeed, modifiers) {
+    let attackSpeed = baseAttackSpeed;
+    if (modifiers) {
+        if (modifiers.speedBonus) attackSpeed *= (1 + modifiers.speedBonus);
+        if (modifiers.speedMalus) attackSpeed *= (1 - modifiers.speedMalus);
+    }
+    return attackSpeed;
+}
+
+function calculateDPS(averageDamage, attacksPerSecond) {
+    return averageDamage * attacksPerSecond;
+}
+
+function calculateHP(baseHP, extraHP) {
+    return baseHP + extraHP;
+}
+
+function calculateHPRegen(baseHPRegen, extraHPRegen) {
+    return baseHPRegen + extraHPRegen;
+}
+
+function calculateMana(baseMana, extraMana) {
+    return baseMana + extraMana;
+}
+
+function calculateManaRegen(baseManaRegen, extraManaRegen) {
+    return baseManaRegen + extraManaRegen;
+}
+
+function calculateAllStats() {
+    const buildData = getCurrentBuildData();
+    const selectedWordsNames = buildData.words.map(word => word.name);
+    const totalRunesRequired = calculateTotalRunesRequired(selectedWordsNames);
+    const attacksPerSecond = calculateAttacksPerSecond(buildData.baseAttackSpeed, buildData.attackSpeedModifiers);
+    const dps = calculateDPS(buildData.averageDamage, attacksPerSecond);
+    const hp = calculateHP(buildData.baseHP, buildData.extraHP);
+    const hpRegen = calculateHPRegen(buildData.baseHPRegen, buildData.extraHPRegen);
+    const mana = calculateMana(buildData.baseMana, buildData.extraMana);
+    const manaRegen = calculateManaRegen(buildData.baseManaRegen, buildData.extraManaRegen);
+
+    const stats = {
+        totalRunesRequired,
+        attacksPerSecond,
+        dps,
+        hp,
+        hpRegen,
+        mana,
+        manaRegen,
+    };
+
+    setStatsInUI(stats);
+}
+// --- Load Build from URL ---
+function loadBuildFromURL() {
+    // Existing logic ...
+
+    // Call calculateAllStats at the end of loadBuildFromURL
+    calculateAllStats();
+}
+
+// --- Functions populacji (bez zmian) ---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 let selectedMainGuildPath = null;
 
@@ -253,6 +375,11 @@ function setupEventListeners() {
     exportJsonButton.addEventListener('click', exportToJson);
     generateLinkButton.addEventListener('click', generateAndShowShareableLink);
 }
+function applyDarkModeToRuneCosts() {
+    const selectedWords = [...document.querySelectorAll('#wordsList input[type=checkbox]:checked')];
+    const { html } = calculateRuneCosts(selectedWords);
+    document.getElementById('runeCostsSummary').innerHTML = html;
+}
 
 // --- Dark Mode Setup ---
 function setupDarkMode() {
@@ -265,6 +392,9 @@ function setupDarkMode() {
         document.documentElement.classList.remove('dark');
         themeToggle.checked = false;
     }
+    document.getElementById('themeToggle').addEventListener('change', function () {
+        setTimeout(applyDarkModeToRuneCosts, 50); // Small delay to ensure DOM is updated
+    });
 
     themeToggle.addEventListener('change', function () {
         if (this.checked) {
@@ -273,6 +403,58 @@ function setupDarkMode() {
         } else {
             document.documentElement.classList.remove('dark');
             localStorage.setItem('darkMode', 'false');
+        }
+        setTimeout(applyDarkModeToRuneCosts, 50);
+    });
+}
+
+
+// Apply on page load
+document.addEventListener('DOMContentLoaded', function () {
+    setTimeout(applyDarkModeToRuneCosts, 100); // Delay to ensure content is loaded
+});
+
+// Apply whenever the runeCostsSummary content changes
+// This uses a MutationObserver to watch for changes
+const runeCostsObserver = new MutationObserver(function (mutations) {
+    applyDarkModeToRuneCosts();
+});
+
+// Start observing once the DOM is loaded
+document.addEventListener('DOMContentLoaded', function () {
+    const runeCostsSummary = document.getElementById('runeCostsSummary');
+    if (runeCostsSummary) {
+        runeCostsObserver.observe(runeCostsSummary, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            characterData: true
+        });
+    }
+});
+
+
+// Function to apply dark mode styling to rune costs table
+function applyDarkModeToRuneCosts() {
+    const isDarkMode = document.body.classList.contains('dark');
+    const runeCostsSummary = document.getElementById('runeCostsSummary');
+
+    if (!runeCostsSummary) return;
+
+    // Apply styles to the container
+    runeCostsSummary.style.backgroundColor = isDarkMode ? '#2d3748' : '#ffffff';
+    runeCostsSummary.style.color = isDarkMode ? '#f8f9fa' : '#212529';
+
+    // Find and style all children elements
+    const allElements = runeCostsSummary.querySelectorAll('*');
+    allElements.forEach(el => {
+        if (el.tagName === 'TABLE' || el.tagName === 'TR' || el.tagName === 'TD' ||
+            el.tagName === 'TH' || el.tagName === 'DIV') {
+            el.style.backgroundColor = isDarkMode ? '#2d3748' : '#ffffff';
+            el.style.color = isDarkMode ? '#f8f9fa' : '#212529';
+            if (el.tagName === 'TD' || el.tagName === 'TH') {
+                el.style.borderColor = isDarkMode ? '#4a5568' : '#dee2e6';
+            }
         }
     });
 }
@@ -659,31 +841,91 @@ function calculateModifiedSkills(baseSkills) {
     return modifiedSkills;
 }
 
+// Function to calculate and display rune costs
+function calculateRuneCosts(selectedWords) {
+    // Check if slowaRuny is defined
+    if (typeof slowaRuny === 'undefined') {
+        console.error("slowaRuny is not defined!");
+        return { html: '', totalRuneCount: 0 };
+    }
 
-// --- Update Effects Summary (bez zmian) ---
+    // Initialize an object to count runes
+    const runeCounts = {};
+    let totalRuneCount = 0;
+
+    // Count all required runes from selected words
+    selectedWords.forEach(checkbox => {
+        const wordName = checkbox.value;
+        if (slowaRuny.hasOwnProperty(wordName)) {
+            const runes = slowaRuny[wordName];
+            runes.forEach(rune => {
+                runeCounts[rune] = (runeCounts[rune] || 0) + 1;
+                totalRuneCount++;
+            });
+        }
+    });
+
+    // If no runes are required, return empty string
+    if (totalRuneCount === 0) {
+        return { html: '', totalRuneCount: 0 };
+    }
+
+    // Create HTML for rune display
+    let html = '<div class="mt-4 bg-gray-100 dark:bg-gray-800 p-3 rounded-lg">';
+    html += '<h4 class="font-bold mb-2">Wymagane runy:</h4>';
+    html += '<div class="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5">';
+
+    // Sort runes alphabetically for better readability
+    const sortedRunes = Object.keys(runeCounts).sort();
+
+    sortedRunes.forEach(rune => {
+        html += `
+            <div class="bg-white dark:bg-gray-700 rounded p-2 text-center shadow-sm">
+                <span class="font-medium">${rune}</span>
+                <span class="ml-1 text-gray-500 dark:text-gray-300">x${runeCounts[rune]}</span>
+            </div>
+        `;
+    });
+
+    html += '</div></div>';
+
+    return { html, totalRuneCount };
+}
+
+// Update the updateEffectsSummary function to include rune costs
 function updateEffectsSummary() {
     const effectsSummaryDiv = document.getElementById('effectsSummary');
     const selectedWords = document.querySelectorAll('#wordsList input[type="checkbox"]:checked');
 
-    if (selectedWords.length === 0 || typeof slowaData === 'undefined') {
-        effectsSummaryDiv.innerHTML = '<p class="italic text-sm">Wybierz słowa, aby zobaczyć ich efekty.</p>';
+    if (selectedWords.length === 0) {
+        effectsSummaryDiv.innerHTML = '<p>Wybierz słowa, aby zobaczyć ich efekty.</p>';
         return;
     }
 
-    let html = '<ul class="list-disc pl-5 space-y-1 text-sm">';
+    let html = '<ul class="list-disc pl-5">';
     let totalCost = 0;
+    let selectedWordItems = [];
 
     selectedWords.forEach(checkbox => {
         const wordName = checkbox.value;
         const word = slowaData.find(w => w.name === wordName);
         if (word) {
-            const cost = parseInt(word.cost) || 0;
-            totalCost += cost;
-            html += `<li class="mb-1"><span class="font-medium">${wordName}</span> (${cost}) - <span class="text-gray-600 dark:text-gray-400">${word.description}</span></li>`;
+            totalCost += parseInt(word.cost);
+            selectedWordItems.push(`<li class="mb-2"><span class="font-medium">${wordName}</span> (${word.cost}) - ${word.description}</li>`);
         }
     });
+
+    html += selectedWordItems.join('');
     html += '</ul>';
+
+    // Add total cost summary
     html = `<p class="mb-2 font-bold">Łączny koszt: ${totalCost}</p>` + html;
+
+    // Add rune cost information
+    const { html: runeHtml, totalRuneCount } = calculateRuneCosts(selectedWords);
+    if (totalRuneCount > 0) {
+        html += runeHtml;
+    }
 
     effectsSummaryDiv.innerHTML = html;
 }
@@ -1011,7 +1253,7 @@ function generateAndShowShareableLink() {
     const buildData = getCurrentBuildData();
     const encodedData = encodeBuildData(buildData);
 
-    if(encodedData) {
+    if (encodedData) {
         const baseUrl = window.location.origin + window.location.pathname;
         const shareableLink = baseUrl + '#' + encodedData;
 
@@ -1060,3 +1302,15 @@ function generateAndShowShareableLink() {
     }
 }
 // --- Koniec funkcji do obsługi linków udostępniania ---
+
+
+
+
+
+
+
+
+
+// Koniec skryptu
+// --- Koniec funkcji do obsługi linków udostępniania ---
+
