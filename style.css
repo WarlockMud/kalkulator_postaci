@@ -90,34 +90,25 @@ body {
     color: white;
 }
 
-.skill-diff {
-    right: 0.5em;
-    /* Spróbuj tej wartości jako punktu wyjścia */
-    top: -1.0em;
-    /* Możesz też spróbować użyć transformacji, aby dodatkowo przesunąć w lewo */
-    /* transform: translateX(100%); */
-    /* To przesunie element w prawo o jego własną szerokość */
-}
-
-.guild-section {
-    margin-bottom: 2rem;
-    /* Większy odstęp między sekcjami gildii */
-}
 
 .dark select {
-    background-color: #2d3748;
-    /* Użyj ciemnego koloru tła, np. takiego jak tło kart */
-    color: #f8f9fa;
-    /* Ustaw jasny kolor tekstu dla lepszego kontrastu */
-    border-color: #4a5568;
-    /* Dopasuj kolor obramowania do innych ciemnych elementów */
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border-color: var(--border-color);
 }
+
 
 #skillsSummary {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    /* Or auto-fit, etc. */
     gap: 0.5rem;
-    /* Reduced gap */
     padding-right: 0.25rem;
+}
+
+#skillsSummary .p-2.rounded.shadow-sm {
+    background-color: var(--card-bg);
+}
+
+.dark #skillsSummary .p-2.rounded.shadow-sm {
+    background-color: #2d3748;
 }
