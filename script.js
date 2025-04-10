@@ -348,9 +348,6 @@ function setupDarkMode() {
         document.documentElement.classList.remove('dark');
         themeToggle.checked = false;
     }
-    document.getElementById('themeToggle').addEventListener('change', function () {
-        setTimeout(applyDarkModeToRuneCosts, 50); // Small delay to ensure DOM is updated
-    });
 
     themeToggle.addEventListener('change', function () {
         if (this.checked) {
@@ -360,62 +357,9 @@ function setupDarkMode() {
             document.documentElement.classList.remove('dark');
             localStorage.setItem('darkMode', 'false');
         }
-        setTimeout(applyDarkModeToRuneCosts, 50);
     });
 }
 
-
-// Apply on page load
-document.addEventListener('DOMContentLoaded', function () {
-    setTimeout(applyDarkModeToRuneCosts, 100); // Delay to ensure content is loaded
-});
-
-// Apply whenever the runeCostsSummary content changes
-// This uses a MutationObserver to watch for changes
-const runeCostsObserver = new MutationObserver(function (mutations) {
-    applyDarkModeToRuneCosts();
-});
-
-// Start observing once the DOM is loaded
-document.addEventListener('DOMContentLoaded', function () {
-    const runeCostsSummary = document.getElementById('runeCostsSummary');
-    if (runeCostsSummary) {
-        runeCostsObserver.observe(runeCostsSummary, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            characterData: true
-        });
-    }
-});
-
-
-// Function to apply dark mode styling to rune costs table
-function applyDarkModeToRuneCosts() {
-    const isDarkMode = document.body.classList.contains('dark');
-    const runeCostsSummary = document.getElementById('runeCostsSummary');
-
-    if (!runeCostsSummary) return;
-
-    // Apply styles to the container
-    runeCostsSummary.style.backgroundColor = isDarkMode ? '#2d3748' : '#ffffff';
-    runeCostsSummary.style.color = isDarkMode ? '#f8f9fa' : '#212529';
-
-    // Find and style all children elements
-    const allElements = runeCostsSummary.querySelectorAll('*');
-    allElements.forEach(el => {
-        if (el.tagName === 'TABLE' || el.tagName === 'TR' || el.tagName === 'TD' ||
-            el.tagName === 'TH' || el.tagName === 'DIV') {
-            el.style.backgroundColor = isDarkMode ? '#2d3748' : '#ffffff';
-            el.style.color = isDarkMode ? '#f8f9fa' : '#212529';
-            if (el.tagName === 'TD' || el.tagName === 'TH') {
-                el.style.borderColor = isDarkMode ? '#4a5568' : '#dee2e6';
-            }
-        }
-    });
-}
-
-// --- NOWOŚĆ: GP Skills Toggle Setup ---
 function setupGpToggle() {
     const gpSkillsToggle = document.getElementById('gpSkillsToggle');
     const gpSkillsStatusSpan = document.getElementById('gpSkillsStatus'); // <-- NOWOŚĆ: Pobierz span statusu
@@ -649,13 +593,23 @@ function skillIdToName(id) {
     return skillKey || null;
 }
 
+function getWordByName(name) {
+    return slowaData.find(word => word.name === name);
+}
+
 function calculateModifiedSkills(baseSkills) {
     const modifiedSkills = {...baseSkills}; // Work on a copy
     const selectedWords = document.querySelectorAll('#wordsList input[type="checkbox"]:checked');
 
+    function modifySkill(skillName, value) {
+        if (modifiedSkills.hasOwnProperty(skillName)) {
+            modifiedSkills[skillName] = modifiedSkills[skillName] + value;
+        }
+    }
+
     selectedWords.forEach(checkbox => {
         const wordName = checkbox.value;
-        const word = slowaData.find(w => w.name === wordName)
+        const word = getWordByName(wordName)
         let effectValue
         if (word && word.effects) {
             word.effects.forEach(effect => {
@@ -665,26 +619,20 @@ function calculateModifiedSkills(baseSkills) {
                     case '_pb_skill':
                         const targetSkill = skillIdToName(effect[1])
                         effectValue = parseInt(effect[2])
-                        if (modifiedSkills.hasOwnProperty(targetSkill)) {
-                            modifiedSkills[targetSkill] = (modifiedSkills[targetSkill] || 0) + effectValue
-                        }
+                        modifySkill(targetSkill, effectValue)
                         break
                     case '_pb_skill_weapon':
                         effectValue = parseInt(effect[1]);
                         const combatSkills = ["miecze", "sztylety", "topory", "mloty", "wlocznie", "szable", "bronie drzewcowe", "bronie lancuchowe", "maczugi", "bicze", "luki", "kusze"];
                         combatSkills.forEach(skill => {
-                            if (modifiedSkills.hasOwnProperty(skill)) {
-                                modifiedSkills[skill] = (modifiedSkills[skill] || 0) + effectValue;
-                            }
+                            modifySkill(skill, effectValue)
                         })
                         break
                     case '_pb_skill_magic_all':
                         effectValue = parseInt(effect[1]);
                         const magicSkills = ["magia ognia", "magia wody", "magia ziemi", "magia powietrza", "magia mroku", "iluzja", "przemiana", "przywolywanie", "magia runiczna", "czarodziejstwo", "magia zycia", "mistycyzm", "zaklinanie"];
                         magicSkills.forEach(skill => {
-                            if (modifiedSkills.hasOwnProperty(skill)) {
-                                modifiedSkills[skill] = (modifiedSkills[skill] || 0) + effectValue;
-                            }
+                            modifySkill(skill, effectValue)
                         })
                         break
                     case '_pb_skill_swap':
@@ -693,8 +641,8 @@ function calculateModifiedSkills(baseSkills) {
                         const val1 = baseSkills[skill1] || 0;
                         const val2 = baseSkills[skill2] || 0;
                         const diff = val1 - val2;
-                        modifiedSkills[skill1] = (modifiedSkills[skill1] || 0) - diff;
-                        modifiedSkills[skill2] = (modifiedSkills[skill2] || 0) + diff;
+                        modifySkill(skill1, -diff);
+                        modifySkill(skill2, diff);
                         break
                 }
             });
@@ -713,27 +661,18 @@ function calculateModifiedSkills(baseSkills) {
 
 // Function to calculate and display rune costs
 function calculateRuneCosts(selectedWords) {
-    // Check if slowaRuny is defined
-    if (typeof slowaRuny === 'undefined') {
-        console.error("slowaRuny is not defined!");
-        return {html: '', totalRuneCount: 0};
-    }
-
-    // Initialize an object to count runes
     const runeCounts = {};
     let totalRuneCount = 0;
 
     // Count all required runes from selected words
     selectedWords.forEach(checkbox => {
         const wordName = checkbox.value;
-        if (slowaRuny.hasOwnProperty(wordName)) {
-            const runes = slowaRuny[wordName];
-            runes.forEach(rune => {
-                runeCounts[rune] = (runeCounts[rune] || 0) + 1;
-                totalRuneCount++;
-            });
-        }
-    });
+        const word = getWordByName(wordName)
+        word.runes.forEach(rune => {
+            runeCounts[rune] = (runeCounts[rune] || 0) + 1;
+            totalRuneCount++;
+        })
+    })
 
     // If no runes are required, return empty string
     if (totalRuneCount === 0) {
@@ -741,7 +680,7 @@ function calculateRuneCosts(selectedWords) {
     }
 
     // Create HTML for rune display
-    let html = '<div class="mt-4 bg-gray-100 dark:bg-gray-800 p-3 rounded-lg">';
+    let html = '<div class="mt-4 dark:bg-gray-800 p-3 rounded-lg">';
     html += '<h4 class="font-bold mb-2">Wymagane runy:</h4>';
     html += '<div class="grid grid-cols-3 gap-2 md:grid-cols-4 lg:grid-cols-5">';
 
@@ -750,7 +689,7 @@ function calculateRuneCosts(selectedWords) {
 
     sortedRunes.forEach(rune => {
         html += `
-            <div class="bg-white dark:bg-gray-700 rounded p-2 text-center shadow-sm">
+            <div class="dark:bg-gray-700 rounded p-2 text-center shadow-sm border border-gray-300 dark:border-gray-800">
                 <span class="font-medium">${rune}</span>
                 <span class="ml-1 text-gray-500 dark:text-gray-300">x${runeCounts[rune]}</span>
             </div>
