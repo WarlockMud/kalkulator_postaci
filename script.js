@@ -665,7 +665,9 @@ function calculateModifiedSkills(baseSkills) {
                     case '_pb_skill':
                         const targetSkill = skillIdToName(effect[1])
                         effectValue = parseInt(effect[2])
-                        modifiedSkills[targetSkill] = (modifiedSkills[targetSkill] || 0) + effectValue
+                        if (modifiedSkills.hasOwnProperty(targetSkill)) {
+                            modifiedSkills[targetSkill] = (modifiedSkills[targetSkill] || 0) + effectValue
+                        }
                         break
                     case '_pb_skill_weapon':
                         effectValue = parseInt(effect[1]);
