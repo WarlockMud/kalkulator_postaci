@@ -134,7 +134,7 @@
                 <div class="lg:col-span-2">
                     <div class="card rounded-lg shadow p-4 mb-6">
                         <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-xl font-semibold">Podsumowanie Umiejętności</h2>
+                            <h2 class="text-xl font-semibold">Zarządzanie Profilami</h2>
                             <div class="flex space-x-2">
                                 <button id="exportMdButton"
                                     class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm">
@@ -149,11 +149,36 @@
                                     style="min-width: 200px;">
                                     Link do udostępnienia
                                 </button>
-                                <div class="mt-0 hidden">
-                                    <input type="text" id="shareLinkInput" readonly
-                                        class="w-full px-3 py-2 rounded-md shadow-sm">
-                                </div>
                             </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <input type="text" id="profileNameInput" placeholder="Nazwa profilu..." 
+                                class="w-full p-2 border rounded bg-transparent border-gray-400 mb-2">
+                            <button id="saveProfileButton" 
+                                class="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                                Zapisz profil
+                            </button>
+                        </div>
+
+                        <div class="mb-4">
+                            <select id="profilesList" 
+                                class="w-full p-2 border rounded bg-transparent border-gray-400 mb-2">
+                                <option value="">Wybierz profil...</option>
+                            </select>
+                            <div class="flex space-x-2">
+                 
+                                <button id="deleteProfileButton" 
+                                    class="flex-1 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">
+                                    Usuń profil
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card rounded-lg shadow p-4 mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="text-xl font-semibold">Podsumowanie Umiejętności</h2>
                         </div>
 
                         <div id="skillsSummary" class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -195,6 +220,7 @@
     <script src="gildie_polzawodowe.js"></script>
     <script src="slowa.js"></script>
     <script src="skills.js"></script>
+    <script src="database.js"></script>
     <script src="script.js"></script>
     <script src="runes.js"></script>
 </body>
