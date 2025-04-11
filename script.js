@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     populateWordsList();
     loadBuildFromURL(); // Load existing build from URL
     calculateAllStats();
+    setupProfileManagement();
 });
 
 // --- UI Update Functions ---
@@ -878,17 +879,17 @@ async function applyBuildData(buildData) {
 
     // 3. Ustaw gildię zawodową i poczekaj na załadowanie ścieżek
     const guildSelect = document.getElementById('guildSelect');
-    if (buildData.guild && guildSelect.querySelector(`option[value="${buildData.guild}"]`)) {
-        guildSelect.value = buildData.guild;
+    if (buildData.mainGuild && guildSelect.querySelector(`option[value="${buildData.mainGuild.code}"]`)) {
+        guildSelect.value = buildData.mainGuild.code;
         // Ręcznie wywołaj logikę, która normalnie dzieje się po zmianie gildii
-        const selectedGuildData = guildsData.find(g => g.code === buildData.guild);
+        const selectedGuildData = guildsData.find(g => g.code === buildData.mainGuild.code);
         updateRacesAllowed(selectedGuildData); // Zaktualizuj rasy od razu
         populatePathSelect(selectedGuildData, false); // Wypełnij ścieżki dla tej gildii
 
         // Ustaw ścieżkę zawodową (teraz, gdy opcje są dostępne)
         const pathSelect = document.getElementById('pathSelect');
-        if (buildData.path && pathSelect.querySelector(`option[value="${buildData.path}"]`)) {
-            pathSelect.value = buildData.path;
+        if (buildData.mainPath && pathSelect.querySelector(`option[value="${buildData.mainPath.name}"]`)) {
+            pathSelect.value = buildData.mainPath.name;
         } else {
             pathSelect.value = ''; // Jeśli zapisana ścieżka nie istnieje lub jest null
         }
@@ -900,17 +901,17 @@ async function applyBuildData(buildData) {
 
     // 4. Ustaw gildię półzawodową i poczekaj na załadowanie ścieżek
     const semiGuildSelect = document.getElementById('semiGuildSelect');
-    if (buildData.semiGuild && semiGuildSelect.querySelector(`option[value="${buildData.semiGuild}"]`)) {
-        semiGuildSelect.value = buildData.semiGuild;
+    if (buildData.semiGuild && semiGuildSelect.querySelector(`option[value="${buildData.semiGuild.code}"]`)) {
+        semiGuildSelect.value = buildData.semiGuild.code;
         // Ręcznie wywołaj logikę, która normalnie dzieje się po zmianie gildii półzawodowej
-        const selectedSemiGuildData = semiGuildsData.find(g => g.code === buildData.semiGuild);
+        const selectedSemiGuildData = semiGuildsData.find(g => g.code === buildData.semiGuild.code);
         updateRacesAllowed(selectedSemiGuildData); // Zaktualizuj rasy
         populatePathSelect(selectedSemiGuildData, true); // Wypełnij ścieżki
 
         // Ustaw ścieżkę półzawodową
         const semiPathSelect = document.getElementById('semiPathSelect');
-        if (buildData.semiPath && semiPathSelect.querySelector(`option[value="${buildData.semiPath}"]`)) {
-            semiPathSelect.value = buildData.semiPath;
+        if (buildData.semiPath && semiPathSelect.querySelector(`option[value="${buildData.semiPath.name}"]`)) {
+            semiPathSelect.value = buildData.semiPath.name;
         } else {
             semiPathSelect.value = '';
         }
@@ -1013,4 +1014,116 @@ function generateAndShowShareableLink() {
 
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// Profile Management
+function setupProfileManagement() {
+    const profileNameInput = document.getElementById('profileNameInput');
+    const saveProfileButton = document.getElementById('saveProfileButton');
+    const profilesList = document.getElementById('profilesList');    
+    const deleteProfileButton = document.getElementById('deleteProfileButton');
+
+    // Load profiles into the dropdown
+    function refreshProfilesList() {
+        loadAllProfiles().then(profiles => {
+            profilesList.innerHTML = '<option value="">Wybierz profil...</option>';
+            profiles.forEach(profile => {
+                const option = document.createElement('option');
+                option.value = profile.id;
+                option.textContent = `${profile.name} (${new Date(profile.timestamp).toLocaleString()})`;
+                profilesList.appendChild(option);
+            });
+        }).catch(error => {
+            console.error('Error loading profiles:', error);
+        });
+    }
+    async function loadProfileBySelected(selectedProfileId) {
+        try {
+            const profile = await loadProfile(selectedProfileId);
+            console.log('Loaded profile data:', profile);
+            
+            if (!profile || !profile.data) {
+                throw new Error('Invalid profile data');
+            }
+            
+            
+            applyBuildData(profile.data).then(() => {
+                console.log("Konfiguracja z profilu wczytana pomyślnie.");
+            }).catch(error => {
+                console.error("Błąd podczas stosowania konfiguracji z profilu:", error);                
+            });            
+        } catch (error) {
+            console.error('Error loading profile:', error);
+            alert('Error loading profile: ' + error.message);
+        }
+    }
+    profilesList.addEventListener('change', async ()  => {
+        const selectedProfileId = profilesList.value;
+        if (!selectedProfileId) {            
+            return;
+        }
+        await loadProfileBySelected(selectedProfileId);
+    });
+    // Save current build as a profile
+    saveProfileButton.addEventListener('click', () => {
+        const selectedProfileId = profilesList.value;
+        const profileName = profileNameInput.value.trim();
+        if(selectedProfileId && !profileName) {
+            const buildData = getCurrentBuildData();
+            updateProfile(Number(selectedProfileId), buildData).then(() => {
+                alert('Profil został zapisany');
+                profileNameInput.value = '';
+                refreshProfilesList();
+            })
+            .catch(error => {
+                console.error('Error saving profile:', error);
+                alert('Wystąpił błąd podczas zapisywania profilu');
+            });
+            return;
+        }
+        
+        if (!profileName) {
+            alert('Proszę podać nazwę profilu');
+            return;
+        }
+
+        const buildData = getCurrentBuildData();
+        saveProfile(profileName, buildData)
+            .then(() => {
+                alert('Profil został zapisany');
+                profileNameInput.value = '';
+                refreshProfilesList();
+            })
+            .catch(error => {
+                console.error('Error saving profile:', error);
+                alert('Wystąpił błąd podczas zapisywania profilu');
+            });
+    });
+
+    // Load selected profile
+
+
+    // Delete selected profile
+    deleteProfileButton.addEventListener('click', () => {
+        const profileId = profilesList.value;
+        if (!profileId) {
+            alert('Proszę wybrać profil do usunięcia');
+            return;
+        }
+
+        if (confirm('Czy na pewno chcesz usunąć wybrany profil?')) {
+            deleteProfile(profileId)
+                .then(() => {
+                    alert('Profil został usunięty');
+                    refreshProfilesList();
+                })
+                .catch(error => {
+                    console.error('Error deleting profile:', error);
+                    alert('Wystąpił błąd podczas usuwania profilu');
+                });
+        }
+    });
+
+    // Initial load of profiles
+    refreshProfilesList();
 }
