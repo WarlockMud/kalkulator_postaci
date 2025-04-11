@@ -163,8 +163,7 @@ function populateWordsList() {
         label.innerHTML = `${capitalize(word.name)} <span class="text-sm text-gray-500 dark:text-gray-400">(${word.cost})</span>`;
 
         const tooltip = document.createElement('div');
-        // Added Tailwind classes for better default tooltip styling
-        tooltip.className = 'tooltip absolute left-full top-0 ml-2 p-2 rounded bg-gray-800 text-white text-xs shadow-lg invisible opacity-0 transition-opacity duration-300 z-10 w-64'; // Adjust width (w-64) as needed
+        tooltip.className = 'tooltip top-10 left-0 ml-2 p-2 mb-0 rounded bg-gray-800 text-white text-xs shadow-lg opacity-100 transition-opacity duration-300 z-[9999] break-words';
         tooltip.innerHTML = `<p>${word.description}</p>`;
 
         div.appendChild(checkbox);
