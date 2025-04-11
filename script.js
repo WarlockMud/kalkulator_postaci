@@ -721,16 +721,15 @@ function getCurrentBuildData() {
 
     const finalSkills = calculateModifiedSkills(getGuildSkills(selectedMainPath, selectedSemiPath, gpEnabled));
 
-    return {
-        mainGuild: selectedMainGuild ? {name: selectedMainGuild.name, code: selectedMainGuild.code} : null,
-        mainPath: selectedMainPath ? {name: selectedMainPath.name} : null,
-        semiGuild: selectedSemiGuild ? {name: selectedSemiGuild.name, code: selectedSemiGuild.code} : null,
-        semiPath: selectedSemiPath ? {name: selectedSemiPath.name} : null,
-        words: selectedWords,
-        totalWordCost: totalCost,
-        finalSkills: finalSkills,
-        timestamp: new Date().toISOString() // Add timestamp for context
-    };
+   return {
+      guild: selectedMainGuild ? selectedMainGuild.code : null,
+      path: selectedMainPath ? selectedMainPath.name : null,
+      semiGuild: selectedSemiGuild ? selectedSemiGuild.code : null,
+      semiPath: selectedSemiPath ? selectedSemiPath.name : null,
+      words: selectedWords.map(word => word.name), // Extract only word names
+      totalCost: totalCost,
+      skills: finalSkills,
+   };
 }
 
 
